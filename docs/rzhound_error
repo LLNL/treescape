@@ -1,0 +1,52 @@
+
+
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+Cell In[1], line 24
+     21 sys.path.append("/usr/gapps/spot/treescape-ven/lib/python3.9/site-packages")
+     22 sys.path.append("/usr/gapps/spot/treescape")
+---> 24 import treescape as tr
+     26 mytime = tr.MyTimer()
+
+File /usr/gapps/spot/treescape/treescape/__init__.py:1
+----> 1 from .StackedLine import StackedLine
+      2 from .TreeScapeModel import TreeScapeModel
+      3 from .CaliReader import CaliReader
+
+File /usr/gapps/spot/treescape/treescape/StackedLine.py:2
+      1 from .Reader import Reader
+----> 2 from .TreeScapeModel import TreeScapeModel
+      3 from .StackedLinePython import  StackedLinePython
+      4 import os
+
+File /usr/gapps/spot/treescape/treescape/TreeScapeModel.py:1
+----> 1 from .ThicketReader import ThicketReader
+      2 from .CaliReader import CaliReader
+      3 from .Reader import Reader
+
+File /usr/gapps/spot/treescape/treescape/ThicketReader.py:21
+     18 from IPython.display import display
+     19 from IPython.display import HTML
+---> 21 import hatchet as ht
+     22 import thicket as tt
+     24 from .ThicketMultiplierStub import ThicketMultiplierStub
+
+File /usr/gapps/spot/treescape-ven/lib/python3.9/site-packages/hatchet/__init__.py:9
+      1 # Copyright 2017-2024 Lawrence Livermore National Security, LLC and other
+      2 # Hatchet Project Developers. See the top-level LICENSE file for details.
+      3 #
+   (...)
+      6 # make flake8 unused names in this file.
+      7 # flake8: noqa: F401
+----> 9 from .graphframe import GraphFrame
+     10 from .query import QueryMatcher
+     11 from .chopper import Chopper
+
+File /usr/gapps/spot/treescape-ven/lib/python3.9/site-packages/hatchet/graphframe.py:27
+     24 from .chopper import Chopper
+     26 try:
+---> 27     from .cython_modules.libs import graphframe_modules as _gfm_cy
+     28 except ImportError:
+     29     print("-" * 80)
+
+ImportError: cannot import name 'graphframe_modules' from 'hatchet.cython_modules.libs' (/usr/gapps/spot/treescape-ven/lib/python3.9/site-packages/hatchet/cython_modules/libs/__init__.py)

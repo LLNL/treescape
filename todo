@@ -1,0 +1,1196 @@
+
+
+- get the git repo working.
+    * the one for which we're doing ESW, let matt know, ask if we can now make it public.
+- load dataset using node command
+- make a new plugin.
+
+
+- work more on graffana now.
+- set default to 25 from 15.  and deploy that.
+
+
+- upcoming family sick day.
+- move to B453
+DONE -email matt about SCF and testing that was done.
+DONE - SCF -> try to login again using padebug
+
+DONE - Brag Sheet
+DONE - PA feedback start
+
+- after approval from ESW
+    * will need to put various files (license files) in a certain place.
+    * then set up benchmark-tutorial
+- help stephanie setup treescape in benchmark-tutorial
+    * modify NightlyTestDemo_local to work within the benchmark-tutorial
+    * setup data.
+    * give stephanie a notebook.
+
+DONE - fix RZ jupyter notebook.  got a fatal error from hatchet.
+    * documented RZ hound error
+    * did lsfSpawner make a difference?  loginNode seems to have worked.
+    * now works again on rzgenie.
+
+DONE - 1. redeploy everywhere
+    * first reduce size of repo.
+    * retest.
+    * SCF:
+    * RZ No space left on device. inside of /usr/gapps/spot/
+        * regardless of using clone or cp -r *
+
+DONE - 2. SCF tasks:
+    DONE - setup world permissions.
+    DONE - fix chrome:
+    DONE - redeploy
+    DONE - IDM: create new uesr account to test with
+    DONE - fiz: test_notebook (get) to test with on commannd line.
+
+DONE - 2. rerun export SVG make sure it works:
+    cd /Users/aschwanden1/treescape/scripts
+    ./export_cron.py
+
+DONE - 1.  try different parallel process number
+    * find optimal number of processes
+
+DONE - test regression test with broken data values in json data.
+    * i tested, changing the cali file __rec=node,id=39,attr=35,data=NOT_FOU_MPI_Comm_free
+    * and it did give me a warning.
+    * also, i tried changing the values within mpi.json and that also failed as expected.
+    python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/mpi
+    ./regression_scripts/run_regression_test.sh mpi
+
+3. make sure no hard coded paths in regression test.
+
+DONE - 5. run tests on deployments
+    * was able to run on CZ.
+    * implement/fix regression test will run on the CZ/RZ
+    * pascal@oslic6 (master *) ~/treescape:
+        ./regression_scripts/run_regression_test.sh mpi
+    * i had to change somethings to make it run
+    * then I had to export PYTHONPATH=$PYTHONPATH:/g/g0/pascal/treescape
+    . ~/venv-stacked/bin/activate
+    (venv-stacked) pascal@oslic6 (master *) ~/treescape: ./regression_scripts/run_regression_test.sh mpi
+    this ran fine.
+
+DONE - had meeting with James taliaferro and
+    * checked out repo, was able to clone it.
+    * starting to set up dependencies.
+
+Later:
+7.  David Boehme visualization - memory work.
+
+
+cd ~/.config/google-chrome
+Delete the following files.
+SingletonCookie
+SingletonLock
+SingletonSocket
+
+
+DONE - fix stephanie's permission issue on SCF
+DONE - login to SCF.
+DONE - Take a look at nightlyTestDemo_local and find out why there's a spike in the duplicated data.
+    * specifically teh first graph (the MultiLine one)
+    * Confirmed -> Feburary 2021 has Double the Data Points.  but why?  probably because that was the month of data that was duplicated.
+    * make_date_test2.py is fixed now and works for cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_24c"
+    * the anomolous spike no longer shows up
+DONE - fixed bug where dates were overlapping
+
+DONE - console log number of x axis points on the chart
+DONE - what happens when we get more data than pixels
+    * set up a test. and find out what happened, is data aggregated or dropped.
+    * "Chart.js automatically skips or compresses data rendering when x-axis data exceeds pixel width"
+    * If You Use the Zoom/Pan Plugin — It Operates on All the Data
+        - Chart.js retains your entire dataset in memory, even if it skips rendering some of the points for performance. So:
+            ^Zooming and panning will give access to all the original data, not just a subset that was drawn initially.
+            ^Nothing is actually dropped unless you manually decimate the dataset yourself before passing it to the chart.
+
+- Performance test on the cluster: /Users/aschwanden1/datasets/newdemo/test_plus_24a
+    * how long will it take?
+    * how much memory?
+    * if it's high like 25 seconds: see if we can make it faster.
+- What tests can we do? (Regression tests)
+    * ideas for what we can test.
+    * maybe some automated tests, to test against the data that is coming to the plot
+
+
+cd /Users/aschwanden1/treescape
+./regression_scripts/run_regression_test.sh mpi
+python regression_scripts/regression_test_performance_CaliReader.py --list-info
+python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/mpi
+
+# For test_plus_6
+python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test_plus_6
+
+# For test_plus_24c
+python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test_plus_24c
+
+# For test
+python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test
+
+DONE - Ltrain
+DONE - Deploy: /usr/gapps/spot/dev/thicket-playground onto the SCF
+    * test with thicket-test.py
+DONE - make a big data set that is a whole Year.
+    * Jan - December.  Do 2 years, change cali files.
+    * made another one for 4 years.
+    * Test setXAggregation(MAX) especially.
+DONE - wrote code to figure out top Node dynamically, in JS for topmax aggregation
+- Need to debug flamegraph amounts, including the topmax X aggregation.
+DONE - Top Max X Aggregation
+    * Runs: chooses one run and is consistently using that based on what the highest drill value is (main) -> or whatever they initially set the drill value to
+    * look for all min, max, avg, sum, implementations
+    * don't forget about export SVG topmax too.
+DONE - update esw.llnl.gov, check it periodically.  now on Directorate review, OC review, EC review, IPO review
+DONE - Metrics (inclusive_avg) needs to be configurable. be able to send those in.
+- bug: for aggregation of the flamegraph:
+    * don't use "avg" hard coding in FlameGraphModel, make dynamic
+    * make sure that flamegraph nums match up with graph.
+    * implement X Aggregation for flamegraph.
+        * first refactor the getPlotByName to include xaxis and xagg.
+DONE - topMax implementation for exportSVG.
+
+DONE (i think) - BUG: Grapher.plot_sums -> not showing up?
+    * /Users/aschwanden1/treescape/treescape/MultiLine.py:92: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+- In grapher:
+    * make this dynamic: if xaxis == "launchday" or xaxis == "launchdate":
+
+- figure out git clone on pdv.
+---------------------------------------------------------------------------
+Think like a user.  try to address those needs.
+--------------------------------------------------------------------------
+DONE - bug - doing s.render multiple times right after another, somehow the graphs interfere with each other
+    * doing sleep 1 second between each one prevents the issue. removing setTimeout 100 fixes it.
+DONE - respond to steve smith.
+DONE - bug - using tr.StackedLine.AVG -> it's actually using tr.StackedLine.SUM, regardless of which one of the Xaggregations you were using (min, max, sum, avg)
+    * think i thought i had implemented those 4 but actually only sum was implemented.  the rest were only implemented partially.
+    * so i finished implementing them all.
+DONE - need to fix exportSVG scale
+    * Y scale is way too high.
+    * Looks like export_svg is doing what in spot is called "Total time" for Y-axis rather than Avg time/rank
+DONE - Regression test and document
+    * https://lc.llnl.gov/confluence/spaces/TREES/pages/856261707/5+14+2025+Regression+testsDONE - test without thicket and hatchet and see if we need it.
+    * I think we don't need it now but we will need it for creating the parent/child mappings.
+DONE - Render Flamegraph needs an X axis
+DONE - Flamegraph X axis model: still need to get max scale.
+
+DONE - make sure that Avg time/rank on y axis reflects the correct thing that we're graphing.
+
+DONE - Implement set setYaxis for both exportSVG
+DONE - Implement setXAggregation for exportSVG
+DONE - Implement setYAxis StackedLine.
+
+------------------------------------------------------------------------------------------------------------
+- Refactor: move metric specification to StackedLine(), instead of having it inside of caliperReader
+
+
+
+- Solved:why exportSVG doesn't match spot2 and nightly test:
+    * the bug is here: self.inclusive_strings.  the StackedLine.py uses the 3rd one when sum is selected
+    * the export_cron.py uses the 4th one CaliReader line 52: ["min#inclusive#sum#time.duration",
+                                  "max#inclusive#sum#time.duration",
+                                  "avg#inclusive#sum#time.duration",
+                                  "sum#inclusive#sum#time.duration"]
+    ********++++>>>>> self.metric was set to "sum"!!!!!!
+----------------------------------------------------------------------------------
+DONE - find getHome directory.
+https://lc.llnl.gov/confluence/spaces/GITLAB/pages/633381779/GitLab+CI
+
+Hey Pascal,
+
+Your initial email said pdv-wrkflw vs pdvwrkflw and I got confused, thanks for clarifying.
+It sounds like you might need to go through some of the setup steps here to connect and
+enterprise-network host to LC’s gitlab.
+
+You just need to open an ssh tunnel by following the instructions here:
+https://dev.llnl.gov/software-engineering/gitlab/#how-to-connect-to-gitlab
+
+Hope that helps out.
+
+Kevin
+-------------------------------------------------------------------------
+FIXED - sort export SVG dates by integer value.
+DONE - make export SVG work for Ymin/Ymax
+- Check if data is correct
+    * especially between exportSVG and the regular plots
+    * why are the plots different
+    * investigate 10X difference
+DONE - regression test with lulesh_gen/32K
+- see if we can make the colors the same for flamegraph of exprotSVG vs plot.
+    * Partly done.  Colors used are the same but not matching up yet because need to get children for hash
+    * Get children algorithm in order to match colors.
+
+
+DONE - Upgrade MyPass
+DONE - sync to SCF
+    * matt williams, facilities requiest
+    * Get access to sCF AGAIN!
+    * first request didn't have the right assignment.
+    * Facility access request for room
+    &  R2063, R2065, R3152, R3154, R3180.
+    * login blocked due to something in my profile, due to some linux issue
+        * they said they would pass this on up to a tech to look at.
+    * then CAAS plan expired.  i called livit and they said they would re-enable my CAAS and then update ticket
+    * many more emails and phone calls later I'm in.
+    * then the chrome browser won't start up.
+DONE - retest CZ.
+DONE - comments and send all.ipynb to Legendre1
+DONE - make "test" dynamic in MultiLine an dStackedLinePython
+    * use the file that matt changed
+DONE - "Run Info" -> in button.
+DONE - fix X Axis on export SVG.
+    * before all the dates were running together all mushed up.
+DONE - open/close toggle (bottom gets cut off) year goes away after clicking on run info button. (height = 250, 1100)
+DONE - finished implementation exportSVG - don't run it in a jupyter notebook - test on command line.
+    * allow user to specify the location of the file
+        * can do some permission, file present testing and output errors.
+    * keep the same interface, so the user still goes through StackedLine
+    * exportSVG - the rest of the API make it the same.  the methods use the same ones in stackedLine.
+
+- setHeight - for exportSVG.
+    * not working: plt.figure(figsize=(16, 2), dpi=100)
+    * might be easier for PNG files.
+- Intermittent issue, isolate: Fix drilldown for LagrangeElements
+- low priority feature: toggle times lenght of date strings.
+    * make date strings lower if the user chooses, so that it won't take up so much real estate.
+- caliReader -> make inclusive strings configurable
+    * maybe find that info from the cali files?
+
+
+DONE - Get rid of white space. (meta data/ start colapsed)
+DONE - get rid of download button.
+DONE - Height feature, make sure it works.  sl.setHeight
+DONE - do sample notebook that contains all the functionality that we can demonstrate
+    * regression/all.ipynb
+    * https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/workspaces/auto-i/tree/treescape/regression/all.ipynb
+- make sure multiLine gets deployed too and email sample notebook to matt.
+    * test for constants.
+DONE - make new requirements file with minimal version.
+    * get rid of Pinned versions
+    * give that to stephanie so that she can create a super set venv.
+DONE - after drill down/ drill up make sure it stays
+    * DONE - back button also needs to redisplay
+    * DONE - when you first render the graph needs to show up.
+    * DONE - redisplay active tab.
+    * trying to get rid of warning message about roundtrip not being
+- Deploy to CZ and test
+    * Git pull failed: fatal: error when closing loose object file: No space left on device
+        fatal: unpack-objects failed
+
+
+try to install:
+the following made the front end work: (notice it's version 11 of angular that was needed)
+ssh aschwanden1@pdvwrkflw-u-dev
+git clone ssh://git@rzgitlab.llnl.gov:7999/ipdva/workflow.git
+sudo npm uninstall -g @angular/cli
+sudo npm install -g @angular/cli@11
+
+check on service now ticket for room access.
+
+docker run -it 41ad1edd39ed sh
+/ #
+su - node
+nick evans
+sudo sh
+ssh aschwanden1@pdvwrkflw-u-dev
+ssh://git@rzgitlab.llnl.gov:7999/ipdva/workflow.git
+
+
+DONE - for documentation: example notebook taht calls everything and that will be the first documentation.
+    * comments above each thing
+
+DONE - first pass, Implement in Python main graph for export svg
+    * will be an api call
+    * make sure to include a function for setDrillDownLevel
+    * same interface functions
+    * make a function sl.exportSVG(), and it should take teh same set and path as render.
+        * a path to export the file to.  need to be able to run inside a cron job.
+
+DISCUSS - where do we put the SVG files once made?  because they're on the server.
+
+DONE - Matt likes the sys.path.append but not the virtual env.  How do we get everything from the virtual environment into the sys.path.append()
+
+DONE - setWidth, setHeight -> don't maintain aspect ratio. -> we want short wide graphs.
+- Demo PNG image download:
+    * still need to make background white.
+    * still need to grab the right instance, so it downlaods the correct iage.
+- scalable vector graphic
+    Test CAse: renameing of a node, adding new nodes, remove something but children become child of the thing above it.
+
+    * chart.js convert a chart to an image and then downloads it
+    * in order to draw stacked line we need the PJ_Bus.entireForest
+    * static export option. export to svg image.
+    * see if chart.js has that.
+    * sl.draw() -> matplotlib, use that to make svg. (kenny's request)
+    * sl.setDrillLevel will be important because person can not do drill down.
+    * implement in python instead of in JS.
+- Test removal of leaf nodes and middle nodes on some of the trees
+    * removeRandomPerftreeEntry
+
+- Make Virtual venv able to have path:
+    * echo "/path/to/your/module" > path/to/venv/lib/pythonX.X/site-packages/custom_module.pth
+    * python -m ipykernel install --name=treescape-ven --display-name "treescape-venv"
+pip install notebook ipykernel
+source /usr/gapps/spot/treescape-ven/bin/activate
+python3 -m ipykernel install --user --name=treescape-ven --display-name "Treescape Ven"
+
+- default to collapse the triangle part, adjust height.
+- deploy hieght
+- check for constants, hard coded stuff
+    * MultiLine: for dates: metavar == "launchday":
+    * Will always be graphing sums, right? 'sum' in metrics
+
+- bug fix multiLine
+    * change "test" to not be hardcoded
+    * make sure launchdate is not hardcoded.
+- why don't drop down triangles appear all the time?
+    * added getVersion() call.
+- check deployment, make sure it's the latest.
+- Use Matt's notebook. (demo) -> TestsNotebook.ipynb
+
+DONE - Send Yokelson additional instructions:
+    * give her the venv instructions to get it to show up.
+
+DONE - setWidth, setHeight on StackedLine (so it won't appear so large)
+    * JS is done, need to do the python setting.
+    * still needs more testing -> make sure stuff fits.
+DONE - refactor example.ipynb and put variables at the top.
+DONE - 1st implementation of MultiLineChart.
+DONE - Open close widget show/hide with triangle
+DONE - Default meta data to closed
+DONE - BUG: Need to fix setDrillLevel
+DONE - have a button that opens and closes it.
+DONE - CZ/RZ ReDeployment with new source code
+DONE - CaliReader: make a new error message if the metric_string is not found.
+    * https://github.com/LLNL/thicket-tutorial/tree/develop/data
+    * walk through that directory and see what errors i run into here.
+DONE - Make CaliReader take metric_string so you can tell it what to look for.
+    * BUG: rerunning it with different parameters on 3rd time doesn't seem to work?
+- Feature: default to showing stuff even if the person hasn't hovered over it.
+    * almost there.
+- release process clone.
+    * moving repo: first couldn't get ssh connection to new repo working
+    * then switched to oslic
+    * then issues with bare repo approach to save history
+    * then could push some refs error
+    * on oslic, when trying to push: ! [remote rejected] main -> main (pre-receive hook declined)
+- figure out build-api.sh
+- BUG: setComponents(....) -> Fix.
+
+
+
+
+
+DONE - if cali_loc is incorrect, (list index out of range), need a better error message for this.
+
+Tasks:
+https://lc.llnl.gov/orbit/gravitate/rzgenie2/user/{yourname}/lab/tree/
+
+Top 2 tasks:
+1) Release process -
+    - gett this working: git clone ssh://git@czgitlab.llnl.gov:7999/lc/treescape.git
+2) Get more datasets working.
+    DONE - david got his dataset working in his browser, i was able to work his data as well on the CZ
+    - https://github.com/LLNL/thicket-tutorial/tree/develop/data (stephanie)
+        * KeyError: 'min#inclusive#sum#time.duration'
+            * handoff to David.
+        * Jeff Grundy
+- went to meeting.
+
+---------------------------------------------------------------------------
+DONE - forward email to david and stephanie
+    * give them the sample notebooks.
+    * sample code for treescape model. iwth some documentation.
+DONE - write to Rapheal PI see if he has funding. cc Dan Laney.
+DONE - Legendre and stephanie and david, Email with Treescdape Venv
+- AutoSave - find out why it doesn't like those tags, google it?
+    * Request Rejected</title></head><body>
+    The requested URL was rejected. Please consult with your administrator.<br><br>
+    Your support ID is: 2318127566673575907<br><br><a href='javascript:history.back();'>[Go Back]</a></body></html>
+
+MultiLineChart:
+- Linegraph should be in Python and have very similar api as stackedLine
+- LineGraph should have setAxis('launchday')
+- LineGraph should also have setWidth, setHeight
+- setRegion(region)  Region should be "main" or "lulesh.cycle", etc.  main should be default
+- setLine(line)  line is "test", "problem_size", "jobsize"
+
+I think I see the problem with that dataset. The columns you expect are not all there,
+we ran this as a top-down dataset, so time metrics (besides inclusive/exlusive time) was not the focus:
+
+time                 time (exc)          ProblemSize    Reps        Iterations/Rep    Bytes/Rep          Kernels/Rep Flops/Rep          Retiring Frontend bound Backend bound Bad speculation Branch mispredict Machine clears Frontend latency Frontend bandwidth Memory bound Core bound External Memory L1 bound  L2 bound  L3 bound
+
+
+Reason why data set is no good:
+This dataset is probably not ideal for the spot-style performance visualization. It was mostly meant for analyzing the top-down metrics. There is a time metric though, or more specifically "inclusive#sum#time.duration.ns", if you really want to use it. This is just the total time though, there's no min, max, or average here.
+Generally I think it would be nice to give users an option to select which metric in the data they want to see.
+
+
+
+
+# Assuming TreeScapeModel behaves like a list of dictionaries
+newlist = [run for run in tsm if run.metadata["test"] == "tiny"]
+
+sorted_new = sorted( newlist, key=lambda run:run.metadata["launchday"])
+tsm.update( sorted_new )
+
+Great for debug.
+#print(type(alltests[0]))
+#print(vars(alltests[0]))
+
+---------------------------------------------------------------
+DONE - fixed bug setYMin(0)
+
+DONE - B) It fails to load the js files if you don't chdir to something like /usr/gapps/spot/treescape/python first
+    * config file to tell it what paths to use
+    * for example for the JS files and CSs files.
+    * let's favor: lookup Python source location and pass down for javascript/CSS files.
+DONE - make tabs work independently
+RZ: make sure we have our own staging environment ~/stackded ?
+DONE - H) -> needs more testing: Be able to run from anywhere:
+"name_of_lines_to_plot" is "m" being passed down from python.
+    * get this working: https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/workspaces/auto-b/tree/spot_home.ipynb
+    * https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/workspaces/auto-7/tree/stacked/sandbox/tree0.ipynb
+    * that's matt's code he wants to get working.
+    * there's some error there "reading 'avg'"
+    * figure out the right sys.path.append(
+    * try it from various directories.
+    TESTED:
+        - /g/g0/pascal/unique_dir, /g/g0/pascal/, /g/g0/pascal/stacked/sandbox
+
+DONE - A) Remove the MyTimer. Treescape fails to load if it's not present.
+DONE - quick fix for "main" not found but n found instead
+DONE - make sure bars never wrap around by changing width.
+DONE - fix localhost so that it still works, not just deployed version.
+    * check in tree0_localhost
+
+* lulesh_gen
+
+Make sure these work:
+
+caliReader = CaliReader("/usr/gapps/spot/datasets/newdemo/test", 15)
+tsm = TreeScapeModel(caliReader)
+sl = StackedLine()
+sl.setXAxis('launchday')
+sl.setYMin(1)
+alltests = sorted(tsm, key=lambda x: x.metadata["launchdate"])
+
+for testname in { t.metadata["test"] for t in alltests }:
+    print(testname)
+    sl.render([t for t in alltests if t.metadata["test"] == testname])
+
+E) StackedLine.setYMin() ignores it if you set a value of 0. Despite that being a legal (and desirable) ymin.
+
+
+C) FIXED - What's with the metadata view? Is it supposed to be a bunch of text below the stacked line?
+D) FIXED - Filtering - Matt Fixed now.
+F) Use the sample notebook I gave you and scroll over the flamegraphs on the tests. Sometimes the LagrangeLeapFrog looks like it line wraps in the flame graph and gets drawn in the wrong place. Here's some screenshots of right-place vs wrong-place:
+G) Roundtrip module could not be loaded.  (Warning: Roundtrip module could not be loaded. Requires jupyter notebook version <= 7.x.)
+J) Fix auto save
+
+DONE - Implement class TreeScapeModel(List)
+    * get rid of iter and next and make it continue to work
+    * as a test do tsm[0], make sure list functionality is there.
+DONE - work on Sl.render(
+    * allow this to take a tsm (that is actually a list) ->
+    * make tsm a list. (so we can reuse all list functions on it) for example tsm[0], etc
+DONE - make setXAxis and setDrillLevel work.
+    * plus validation.
+DONE - need to resolve get_entire_tsm()
+    * need to reimplement the class so that it functions without erroring on that.
+DONE - implement sl.render can take treescapeModel or array
+    * make this work: sl.render([run for run in tsm if run["metadata"]["test"] == "largeprob"])
+DONE - make Run a class
+    * metadata + perftree members of a class.
+    * address side effects of changing this into a class and resolve errors that occur from it
+DONE - Remove "launchdate", it should not be hard codedd in there.
+DONE - handle case where user provides list but not tsm,
+    * no children map means i need to degrade gracefully and still show a chart.
+DONE - update function for tsm class allows user to provide a new list and still be able to use the childrenMap from the tsm object
+    * without a childrenMap, there's no way to create flamegraph or coloring scheme hence the need for the update function to allow users to update a tsm object instead of using an array
+DONE - setDrillLevel default to dynamic value derived from the topp of the childrenMap.
+NOTE: the treeScapeModel MUST be a reader, it can't be just a list because the childrenMap is needed to make the flamegraph and do the coloring
+DONE - Implemented one line TreeScapeModel usage.
+    * needed to use list as parameter in the TressCapeModel constructor and change constructor accordingly
+DONE - figure out "uncaught typeerror" in console
+
+
+DONE - launchDay to show up as a date.
+    * we want to check the type (see anything that is type "date") and show those as a date.
+    * ask David how to get type of the metadata.
+     xx = r.attribute("launchday").get("adiak.type")
+     print(xx)
+
+
+
+everytime:
+* ltrain,
+* timesheet,
+* 100% morning meetings,
+* bcbblocks,
+* even did an article for newsletter
+
+On treescape RZ: the env is here:
+/g/g0/pascal/treescape-venv3a
+
+Created like this:
+pip install -r requirements.txt
+pip install notebook ipykernel
+python -m ipykernel install --user --name=treescape-venv3a --display-name "Python (treescape-venv)"
+
+code located at stacked/sandbox/
+-----------------------------------------------------------------------
+Nov 22 left off:
+PDV Workflow: finally got all the way up to the step 6.
+there seems to be some new breakage.  it's trying to get the wrong experiment's data.  but why?
+
+Nov 22 Left off:
+I got the python side of things working, including the virtual environment
+but the JS libraries wouldn't load.  the "element" variable was not correctly set inside the StackedLine.js
+
+I was investigating this:
+is there something different in the Ipython HTML, Display  of jupyter notebook vs jupyter lab?  currently my code is working in jupy notebook but not jupyter lab
+
+It seems that JupyterLab does not run Ipython so easily, more difficult.
+cali_loc = "/usr/gapps/spot/datasets/newdemo/test"
+
+the HTML output in jupyterLab is being escaped with html entities rendering it unfindable.
+i need to find a solution for that.
+
+var currentCell = $(document.currentScript).closest('.jp-Cell');
+that seems to find 0 length dom so didn't find it.
+
+https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/workspaces/auto-9/tree/stacked/sandbox/Nov%204th.ipynb
+
+
+DONE - Make a Tab. ( below the graph that allows switch between the flamegraph and metadata).
+DONE - Feature: Flamegraph update as you move the mouse)
+DONE - worked on getting BCB block removed.
+- IM code release process.
+
+2nd -> deploy jupyter notebooks.
+  * sample notebooks.
+
+DONE - completed some LTRAIN
+DONE - came to the 9 am meeting
+DONE - wrote an article for the newsletter!
+DONE - write a function on treescapemodel to return meta global values like launchday, etc.
+DONE - write a function on treescapemodel to reuturn childrenMap
+DONE - Example for user to sort: write a function to sort from the users side.
+get_meta_globals => get_meta_data
+
+IM.int.llnl.gov - code
+
+Next Feature - show meta data for hover over.
+
+
+Long term Todo:
+- deploy on jupyter notebooks on LC.
+    * https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/tree/Untitled.ipynb
+    * https://rzlc.llnl.gov/orbit/gravitate/rzgenie2/user/pascal/lab/tree/stacked/sandbox/Untitled.ipynb
+    * Need to figure out how to get . ~/treescape-venv3/bin/activate onto the jupyter notebook.
+(treescape_2024) [pascal@rzslic7:stacked]$ pip install -r requirements.txt
+Looking in indexes: https://wci-repo.llnl.gov/repository/pypi-group/simple
+Processing /private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_52iciqycjz/croots/recipe/anaconda-project_1660339902500/work (from -r requirements.txt (line 5))
+ERROR: Could not install packages due to an OSError: [Errno 2] No such file or directory: '/private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_52iciqycjz/croots/recipe/anaconda-project_1660339902500/work'
+
+- Eventually need to use the same virtual env as hatchet and thicket.
+
+
+- PDV: try ano Older version of code before we made all the angular 18 changes
+    * and resintall everything to make sure angular is older.
+then:
+nvm use 13
+rm -rf node_modules; rm package-lock;
+npm install
+
+
+(treescape_2024) [pascal@rzslic7:stacked]$ pwd
+/g/g0/pascal/stacked
+
+- hover over for flamegraph.
+- implement:
+    * get default xaxis and set xaxis.
+    * i found where i get the cali globals but i don't know what i should set
+- more regression testing to ensure nothing is broken.
+    * test the sort filters against our spot2.
+- see if we need the caliReader or not.
+- do some scalability testing, see how many we can do.
+
+
+http://localhost:8888/notebooks/sandbox/sept%2024th.ipynb
+
+To start up server to:
+./jupy.bash
+
+dateset we're using:
+~/newdemo/test:
+
+1.6 make this work: #sorted( tsm, key=lambda run:run["metadata"]["launchday"])
+    * appears to work.
+
+
+Notes:
+4. self.append(newRun)  # inside treeScapemOdel class.
+5. iterate self rather than self.runs
+6. send another email for reschedule 1 on 1
+
+cd newdemo/test
+(base) aschwanden1@bach ~/newdemo/test: grep id=140 * | awk -F = '{print $5}' | awk -F , '{print $1}' | sort | uniq
+large
+largeprob_16thrd
+largeprob_32thrd
+largeprob_8thrd
+medium
+mpiscale
+onenode
+single
+thrdmpi
+thrdscale
+tiny
+
+
+
+DONE - groupBy in master
+DONE - Feature: Remove launchdate
+    * Working on refactoring for removing xaxis in constructor
+    * required some debugging to move the internal data rep
+    * specify xaxis ('launchdate', 'problem_size') in sl.render()
+DONE - Retest all our functions: setAggregation, setYAxis, setYMin and setYMax, etc.
+DONE - migrated code for setAggregation, setYMax, setYMin, compponents etc
+DONE - test MIN, MAX, etc all constants and make sure they work
+DONE - implement validation on components
+DONE - setAggregation -> for this
+    * get rid of string and use a type
+    * move it to StackedLine
+DONE - implement validation on setXAggregation
+DONE - remove sorting
+DONE - created a ymax and ymin kwargs argument parameters on StackedLine
+DONE - fix bug where you can't run caliReader just once
+    * right now you have to rerun it for each cell.
+DONE - do filterBy by making the treescapemodel iterable:
+    * tsm will be a list
+    * Sl.draw will take a tsm (which is a list)
+
+
+5) Showing meta data on hover over.
+    * DONE - Get x value for hover over action
+    * Send meta data from python down to JS level
+    * Create a look up that maps from meta data objects from the X coordinate, take into account interpolation
+    * Render the resulting value that was lookedup and render it on the right side of the screen
+    * Where to put it?  do we reduce the width of the nodes or the graph?
+    * set up kwargs to optionally show it if listed in the components
+
+2) setMetric ("Avg time/rank" vs "max" vs "min")
+    * Might be out of scope -> this will require reimplementing / refactoring.
+    * ydata needs to become an object that holds all 4 of those
+    * everything that touches that ydata needs to change (at least dozen or more places)
+    * setYAxis should be string.
+    * NOT Implemented Yet.
+    * return the set of metrics the legal strings to be sent
+    * union vs intersection -> user can specify -> default interestion (optional).
+
+
+
+#=============================
+- Users don't need to be able to operate on caliReader
+- No direct access to perftree so that we can change it later on.
+
+
+
+
+
+Create a "Run" object
+TSM is a collection of Runs
+
+Users need to be able to:
+    * Filter (for example
+    * Sort
+
+print(tsm_data[0].metadata["jobsize"])
+print(tsm_data[0].perftree["main"]["min time/rank"])
+print(tsm_data[1].metadata["jobsize"])
+print(tsm_data[1].perftree["main"]["min time/rank"])
+
+metadata
+perftree (currently ydata, remove ydata from caliReader)
+
+
+
+
+
+
+tsm = TreeScapeModel(CaliReader("/usr/gapps/spot/dataset/newdemo/test", 15))
+
+#I can iterate over this tsm
+for r in tsm:
+    print(r.metadata["test"])
+print(tsm[0].metadata["launchday"])
+print(tsm[0].perftree["main"]["min time/rank"]) #print seconds spent in main; optional don't do this initially
+metric_list = tsm.getMetrics() #return set ["min time/rank", "max time/rank", "avg time/rank"]
+#-or-
+metric_list = getMetrics(tsm)
+
+#Let's setup graph
+sl = StackedLine
+sl.setXAxis("launchday")
+sl.setYAxis("avg time/rank")
+sl.setAggregation(sl.AVG)
+sl.setComponents([sl.flamegraph, sl.metadata_vis, sl.linegraph])
+
+#Draw nightly test performance for test "large"
+#  try to do this:
+tsm2 = [run for run in tsm if run.metadata["test"] = "large"]
+
+# but, if can not, then do this:
+# shallow copy, not deep copy.
+tsm2 = TreeScapeModel( [run for run in tsm if run.metadata["test"] = "large"] )
+
+sl.draw(run)
+
+#Draw nightly test performance for test "mpiscale"
+sl.draw([run for run in tsm where run.metadata["test"] = "mpiscale"])
+
+
+###FUTURE, NOT YET####
+#Let's setup flame graph
+fg = FlameGraph
+fg.setColorMap(...)
+fg.setMetric(...)
+fg.draw(tsm[0])
+######################
+
+
+
+After this change:
+               nodes_idx_by_path[path]["xaxis"].append( xVal )
++                nodes_idx_by_path[path]["xaxis"].append( glob0 )  # xVal
+
+ef.nodes.launchdate[0].xaxis = now has an object
+    before it had the value.  we need to adjust the code for this.
+
+
+ * see if we can do group by.
+ * implemented a mutliprocess solution that reimplements the combining inside multiprocess function rather than outside
+    * so combining is happening inside the multiprocess
+ * had to rewrite child map maker because it can't self.mapMaker is not the same from one multiprocess to another multiprocess
+ * made input cali file configurable
+ * allow user to send pool size.
+
+
+TODO:
+1. need to do a real childrenMap implementation inside caliReader
+    * right now it's using a stub.
+    * the thicketReader implementation was thicket, now caliReader needs one.
+    * path (main/lulesh.cycle/LagrangeLeapFrog/LagrangeNodal) contains the mapping. we can build the mapping..
+    * right now not working because the childrenMap outside the multiprocessing function space is not the same as teh one inside
+        * need to get childrenMap out of those multiprocess functions.
+
+2. Need to test various pool sizes.
+3   9.7
+4   7.48
+5   6.25
+8   4.21
+10  4.2
+11  4.36
+15  4.39
+20  4.25
+30  4.67
+40  4.8
+
+
+-------------------------------------------------
+1. Do jupyter notebook test
+    * Been struggling with the installation within the
+    source /g/g0/pascal/venv-stacked/bin/activate
+    Error: Javascript Error: jQuery is not defined
+    * i suspect that the issue may have to do with we're in jupyterLab not jupyter notebook
+    * It's able to run but jquery is not installed.
+
+2. Read many files "get reduction happening in parallel"
+    * pool.map( [[50], [50]] )
+    * do combining inside the multiprocess not outside, that way it'll be faster.
+
+app-routing.module.ts
+Line 35 /experiment:id
+impl
+
+Done - implemented process pool
+Done - create pools with grouping of 10 or X
+
+        #  0.263s to load 100
+        #  2.8s to load 1K          New version 1.067
+
+        #  28 seconds to load 10,000.       60 seconds (i thin most of it was after combining)
+
+                                After           Before we put combine inside.
+                       1K       0.6             1s
+Total Elapsed time     10K      4.14, 4.21      60s
+
+1) Fix issue with color/Flamegraph exception
+2) fix ydata error
+
+1) Multithreading implementation
+    * sleep works but caliper does not.
+    * thread locking:
+        * have separater data structures
+        * then combine them.
+
+    * be able to pool together
+    * specify number of threads.
+    1) try test of just sending an independent object
+    2) implement multi processing - don't need tow worry about locking.
+   cali_json = multiprocessing.Pool(18).map( _cali_to_json, _prependDir(filepath, subpaths))
+        * shared pipe
+        * IO
+
+2) PNG export of the graph.
+    * Got simple example working: file:///Users/aschwanden1/stacked/HTML/makepng.html
+    * Investigated implementation of how we could apply it to our chartJS charts.
+    * Impl looks simple but need to debug why it's not working.
+
+
+- Add metrics to list of supported features?
+
+1) Look for functions: Y
+Excel functions:
+concatenate, average, count, if, AND, vlookup, sum, areas, counta, trim, ACOT, lookup, min, max, today, Acosh function, celing, drop function, char funct., floor function
+The ACOSH function returns the inverse hyperbolic cosine of a number.
+Returns the principal value of the arccotangent, or inverse cotangent, of a number.
+
+3) CaliReader -> find out if memory doubles
+
+4) CaliReader -> where is the performance bottleneck: verify that it's the caliquery that takes so long.
+    * check if we can multiprocess it
+
+    * Optimization: if flamegraph is omitted then I don't think we need the childrenMap
+        * So, if flameGraphUsed: self.mapMaker.make( rec['path'] )
+        * else don't need to run that mapMaker.
+
+    * Check RZ spot2 repo for multiprocess stuff.
+        * we'll need to run these jupyter notebooks on the RZ, right?
+
+
+- Implemented Cali Reader
+    * tree build up
+    * optimized children and parent mapping
+- Refactored TreeScapeModel to take a Reader as input
+- Time Cali REader and spot implementation and compare performance
+- Additional features
+    * setYMax, setYMin
+    * setDrillLevel (renamed)
+
+
+
+
+Tuesday: call livit (925) 424 4357 -> and then login to iSRD machine
+    * then respond to nick to say it is no longer expired.
+- fix server side install as well.
+
+Next:
+ - make parentMap and childrenMap in CaliReader
+    * then remove our stub.
+ - use timer to figure out how long it's taking.
+DONE - remove thicket wrapper implementation and let useCaliper take over.
+
+ - CaliReader: get correct X value from meta data "launchdate"
+ - then aggregate them together to make "sum", "avg", "min", "max"
+ - after that change the index to match out JS data structure so when it passes down it works.
+ - test with TreeScapeModel (with UseCaliReader func) and StackedLine
+
+- SC Account:
+ * MyPass website to schedule an appointment to complete the provisioning process.
+ Note: Your appointment will be in T4726, NOT at the LivIT Service Desk.
+ * T4726Monday, Jun 17, 202410:30 am - 11:00 am (PT)
+
+- iSRD account.
+ * call Livit and do option #3.  it expired.
+
+Question for stephanie:
+    * can we turn off the extraneous output?
+
+-------------------------------------------------------------------------------
+Bench marks:
+10,000
+https://rzlc.llnl.gov/spot/dcvis/?sf=/usr/gapps/spot/datasets/lulesh_gen/10000&ch_launchdate=1&ch_user=1
+
+Takes 51.44, 45.36, 42.01, 41.24, 40.2 seconds
+
+CaliReader from treeScape 10K   30.03, 29.2  seconds
+CaliReader from treeScape 1K   2.99, 2.978 seconds
+CaliReader from treeScape 100   .29, 0.289, .318  seconds
+
+
+
+10K run:
+get_th_ens: 3300 seconds
+get_th_ens()                                    3297.1395392417908
+MultiplierStub()                                15.080559968948364
+GraphTraverseModel                              0.0020258426666259766
+get_entire_for_xaxis - metaobj                  0.21715211868286133
+test df.iterrows() speed                        3.6997599601745605
+get_entire_for_xaxis - iterrows                 5.591546058654785
+get_entire_for_xaxis - renderDat                0.0028409957885742188
+finished TreeScapeModel constructor             0.015604972839355469
+finished renderBoth                             0.023387908935546875
+
+                10K run seconds
+===============================
+ThicketReader   3300
+CaliReader      30
+Spot BE         45
+
+
+
+
+
+
+* Make Classes:
+    Run: Tree, Meta
+
+
+Getting Meta data:
+[pascal@rzslic9:bin]$ pwd
+/usr/gapps/spot/caliper/bin
+[pascal@rzslic9:bin]$ ./cali-query -q 'format json(object)' /usr/gapps/spot/datasets/lulesh_gen/100/0.cali
+
+* Make Stub that contains those
+* conversion function to something the FE can use: entireForest.
+
+
+
+
+I need to take S0170-W (shows in myCaas) but it doesn't appear in Ltrain
+-------------------------------------------------------------------------------
+DONE - 1) components = ["flamegraph", "linegraph"] instead of one string.
+DONE - 1.5) annotations -> call it something else, rename this function.
+DONE - 5) y range. be able to set Y maximum and Y minimum from the treeScapeModel and then send those
+    down the PJBus, and then set the model in the js area so that it then propogates to graph.
+DONE - 4) x tick frequencies feature.  make it so we don't see floats in X axis.
+DONE - typecast x axis to number for string numbers, bug fix'
+DONE - feature: argument: setXaggregation function on treeScapeModel and propogate down to show X aggregation in
+        the graph.  update js model and propogate to graph.
+DONE - click detection broke "clicked outside all plot boundaries", needs fixing.
+
+
+
+2) Treescape expectations -> and caliperreader -> see what caliperreader returns
+Meet with Matt next week and come up with internals that genericize the internals.
+Tuesday 4 pm.
+
+
+-------------------------------------------------------------------------------
+Setting up vue:
+    - lots of library loading issues,
+    - issues with require()
+    - had to figure out how to use custom.js includes from jupyter environment
+    - eval probably the source of some of the issues
+    - attempted vue component loading
+    - misleading error messages: mime type, etc.
+
+DONE - Implemented StackedLine jquery component
+    * using prototype chain
+    * DOM binding within closure
+    * reimplemented drillup and drill down as well as rendering
+
+DONE - for testing, make sure we use separate render/memory
+DONE - 0. make stacked-line-component only get binded once.
+DONE - 0. fix drillUp.
+DONE - create stub with 500 x points
+    * entireForest->nodes->launchdate[0-18]
+    * xaxis
+    * yaxis
+    overwrite the entries and add a bunch more to make each graph unique.
+DONE - command line arguments for annotations.
+    * be able to use a single line of command.
+DONE - set up 100 test cases with different graphs
+    * verify that graphs have their own memory.
+DONE - make flamegraph be instancized.
+DONE - show only flamegraph or ONLY linegraph.
+DONE - preliminary testing on Long 100.ipynb that has several different types of graphs,
+    some using "make_stub", "annotations", and "format" and specifying the xaxis in the model.
+
+
+
+thickets = collections of hatchets
+hatchet = one run.  one *.cali run.
+
+
+- vacation reminder
+
+
+
+
+
+    #sl.render(xaxis='launchday', aggregate='max', metadata_filter="test=mpiperf", flamegraph=true)
+    # -or/and-
+    #sl.setXaxis('launchday')
+    #sl.render(aggregate='max', metadata_filter="test=mpiperf", flamegraph=true)
+    #
+    #sl.renderLinegraph( model )
+
+
+
+
+
+
+
+
+
+- fix click detection, sometimes still buggy?
+
+
+
+Done:
+1. meeting with connor
+    * plans to impl display render
+
+* wrapping Viz with class
+* wrapping Thicket in class
+* started a new git repo
+* identifying data that needs to be charted.
+
+
+can run python3 on command line like so:
+/Users/aschwanden1/opt/anaconda3/bin/python3
+
+
+
+memit example:
+
+%reload_ext memory_profiler
+
+import random
+import time
+
+
+import sys
+
+sys.path.append("python")
+sys.path.append("viz")
+
+from StackedLine import StackedLine
+from ThicketWrapper import ThicketWrapper, TH_ens
+from TreeScapeModel import TreeScapeModel
+
+def my_func():
+    from MyTimer import MyTimer
+    MyTimer("start")
+    # your script here
+    th_obj = TH_ens()
+
+    th_ens, profiles = th_obj.get_th_ens()
+    #th_ens = ""
+    #profiles = ""
+
+
+    model = TreeScapeModel(th_ens, profiles, "launchdate")
+
+    MyTimer("finished TreeScapeModel constructor")
+
+    model.setVisibleAnnotations(['main'])
+    model.setXAxis("launchdate")
+
+    #model.setVisibleAnnotations(['CalcLagrangeElements', 'CalcQForElems', 'ApplyMaterialPropertiesForElems'])
+
+    sl = StackedLine()
+    sl.renderBoth( model )
+
+    t0 = MyTimer("finished renderBoth")
+    t0.print()
+
+
+# Profile the function using %memit
+%memit my_func()
+
+
+
+
+
+
+
+# Example data
+et = {
+    "main": {
+        "xaxis": [
+            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972",
+                "executablepath": "/g/g90/johnson234/exe/STRIP_HEADER/toss17/impending4.8-3472",
+                "libraries": "/etc/fin/etc/home.jafd",
+                "cmdline": "[-active COM",
+                "cluster": "rockfiro",
+                "jobsize": "2",
+                "threads": "101",
+                "iterations": "11400000",
+                "problem_size": "85",
+                "num_regions": "11",
+                "region_cost": "5",
+                "region_balance": "1",
+                "elapsed_time": "184.0",
+                "figure_of_merit": "6560.0",
+                "spot.metrics": "avg#face.duration#inclusive#sum5345"
+            },
+            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972"
+                },
+                            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972",
+            }
+            # Add more objects as needed
+        ],
+        "ydata": [
+            10, 89, 12
+        ]
+    },
+    "TimeIncrement": {
+        "xaxis": [
+            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972",
+                "executablepath": "/g/g90/johnson234/exe/STRIP_HEADER/toss17/impending4.8-3472",
+                "libraries": "/etc/fin/etc/home.jafd",
+                "cmdline": "[-active COM",
+                "cluster": "rockfiro",
+                "jobsize": "2",
+                "threads": "101",
+                "iterations": "11400000",
+                "problem_size": "85",
+                "num_regions": "11",
+                "region_cost": "5",
+                "region_balance": "1",
+                "elapsed_time": "184.0",
+                "figure_of_merit": "6560.0",
+                "spot.metrics": "avg#face.duration#inclusive#sum5345"
+            },
+            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972"
+                },
+                            {
+                "cali.caliper.version": "2.2.0-dev",
+                "cali.channel": "spot",
+                "user": "chavez35",
+                "launchdate": "1565172972",
+            }
+            # Add more objects as needed
+        ],
+        "ydata": [
+            10, 89, 12
+        ]
+    },
+etc
+}
