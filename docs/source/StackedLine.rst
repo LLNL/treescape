@@ -1,6 +1,6 @@
 ..
    Copyright 2025 Lawrence Livermore National Security, LLC and other
-   Treescape Project Developers. See the top-level LICENSE file for details.
+   TreeScape Project Developers. See the top-level LICENSE file for details.
 
    SPDX-License-Identifier: MIT
 
