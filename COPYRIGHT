@@ -21,3 +21,26 @@ Files that are licensed as MIT contain the following
 text in the license header:
 
     SPDX-License-Identifier: (MIT)
+
+External Packages
+-------------------
+Treescape has some external dependencies, which are bundled in the Treescape
+repository. These packages are covered by various permissive licenses. A
+summary listing follows. See the license included with each package for full
+details.
+
+PackageName: jQuery
+PackageHomePage: https://jquery.com/
+PackageLicenseDeclared: MIT
+
+PackageName: md5
+PackageHomePage: https://github.com/emn178/js-md5
+PackageLicenseDeclared: MIT
+
+PackageName: Vue
+PackageHomePage: https://vuejs.org/
+PackageLicenseDeclared: MIT
+
+PackageName: chart.js
+PackageHomePage: https://www.chartjs.org
+PackageLicenseDeclared: MIT
