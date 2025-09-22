@@ -1,3 +1,9 @@
+..
+   Copyright 2025 Lawrence Livermore National Security, LLC and other
+   Treescape Project Developers. See the top-level LICENSE file for details.
+
+   SPDX-License-Identifier: MIT
+
 TreeScapeModel
 =============================
 The TreeScape Model lets you define what you want to see in your charts.  You can

@@ -1,3 +1,8 @@
+# Copyright 2025 Lawrence Livermore National Security, LLC and other
+# Thicket Project Developers. See the top-level LICENSE file for details.
+#
+# SPDX-License-Identifier: MIT
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
