@@ -1,3 +1,8 @@
+# Copyright 2025 Lawrence Livermore National Security, LLC and other
+# Thicket Project Developers. See the top-level LICENSE file for details.
+#
+# SPDX-License-Identifier: MIT
+
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for image generation
 import matplotlib.pyplot as plt
