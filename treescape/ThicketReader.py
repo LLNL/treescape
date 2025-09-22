@@ -8,8 +8,6 @@ from .MyTimer import MyTimer
 input_deploy_dir_str = "/usr/gapps/spot/dev/"
 machine = platform.uname().machine
 
-sys.path.append("/Users/aschwanden1/thicket")
-
 import re
 
 import numpy as np
