@@ -1,7 +1,6 @@
-
-#cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_80"
-#cali_file_loc = "/Users/aschwanden1/datasets/newdemo/mpi"
-#cali_file_loc = "/g/g0/pascal/datasets/newdemo/mpi"
+# cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_80"
+# cali_file_loc = "/Users/aschwanden1/datasets/newdemo/mpi"
+# cali_file_loc = "/g/g0/pascal/datasets/newdemo/mpi"
 
 #  this one should be available for everyone
 cali_file_loc = "/usr/gapps/spot/datasets/newdemo/mpi/"
@@ -18,16 +17,21 @@ sys.path.append("/")
 
 import treescape as tr
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from multiprocessing import freeze_support
+
     freeze_support()
 
-    inclusive_strs = ["min#inclusive#sum#time.duration",
-                      "max#inclusive#sum#time.duration",
-                      "avg#inclusive#sum#time.duration",
-                      "sum#inclusive#sum#time.duration"]
+    inclusive_strs = [
+        "min#inclusive#sum#time.duration",
+        "max#inclusive#sum#time.duration",
+        "avg#inclusive#sum#time.duration",
+        "sum#inclusive#sum#time.duration",
+    ]
 
-    caliReader = tr.CaliReader(cali_file_loc, processes_for_parallel_read, inclusive_strs)
-    tsm = tr.TreeScapeModel( caliReader)
-    #Always be sure to sort your data into some reasonable way.
+    caliReader = tr.CaliReader(
+        cali_file_loc, processes_for_parallel_read, inclusive_strs
+    )
+    tsm = tr.TreeScapeModel(caliReader)
+    # Always be sure to sort your data into some reasonable way.
     alltests = sorted(tsm, key=lambda x: x.metadata[xaxis])

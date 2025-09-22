@@ -5,6 +5,7 @@
 
 from typing import List, Any
 
+
 class CaliMapMaker:
 
     def __init__(self):
@@ -14,11 +15,12 @@ class CaliMapMaker:
       path should look like this: an array of strings.
       ['main', 'lulesh.cycle', 'LagrangeLeapFrog', 'LagrangeElements', 'ApplyMaterialPropertiesForElems']
     """
+
     def make(self, array):
 
-        #print(array)
-        #print('--------------------')
-        #print(self.children_map)
+        # print(array)
+        # print('--------------------')
+        # print(self.children_map)
 
         for i in range(len(array) - 1):
             parent = array[i]
@@ -29,7 +31,6 @@ class CaliMapMaker:
             else:
                 self.children_map[parent] = [child]
 
-
     def getChildrenMap(self):
         return self.children_map
-        #return {'main': ['lulesh.cycle'], 'lulesh.cycle': ['TimeIncrement', 'LagrangeLeapFrog'], 'LagrangeLeapFrog': ['LagrangeNodal', 'LagrangeElements', 'CalcTimeConstraintsForElems'], 'CalcTimeConstraintsForElems': [], 'LagrangeElements': ['CalcLagrangeElements', 'CalcQForElems', 'ApplyMaterialPropertiesForElems'], 'ApplyMaterialPropertiesForElems': ['EvalEOSForElems'], 'EvalEOSForElems': ['CalcEnergyForElems'], 'CalcEnergyForElems': [], 'CalcLagrangeElements': ['CalcKinematicsForElems'], 'CalcKinematicsForElems': [], 'CalcQForElems': ['CalcMonotonicQForElems'], 'CalcMonotonicQForElems': [], 'LagrangeNodal': ['CalcForceForNodes'], 'CalcForceForNodes': ['CalcVolumeForceForElems'], 'CalcVolumeForceForElems': ['IntegrateStressForElems', 'CalcHourglassControlForElems'], 'CalcHourglassControlForElems': ['CalcFBHourglassForceForElems'], 'CalcFBHourglassForceForElems': [], 'IntegrateStressForElems': [], 'TimeIncrement': []}
+        # return {'main': ['lulesh.cycle'], 'lulesh.cycle': ['TimeIncrement', 'LagrangeLeapFrog'], 'LagrangeLeapFrog': ['LagrangeNodal', 'LagrangeElements', 'CalcTimeConstraintsForElems'], 'CalcTimeConstraintsForElems': [], 'LagrangeElements': ['CalcLagrangeElements', 'CalcQForElems', 'ApplyMaterialPropertiesForElems'], 'ApplyMaterialPropertiesForElems': ['EvalEOSForElems'], 'EvalEOSForElems': ['CalcEnergyForElems'], 'CalcEnergyForElems': [], 'CalcLagrangeElements': ['CalcKinematicsForElems'], 'CalcKinematicsForElems': [], 'CalcQForElems': ['CalcMonotonicQForElems'], 'CalcMonotonicQForElems': [], 'LagrangeNodal': ['CalcForceForNodes'], 'CalcForceForNodes': ['CalcVolumeForceForElems'], 'CalcVolumeForceForElems': ['IntegrateStressForElems', 'CalcHourglassControlForElems'], 'CalcHourglassControlForElems': ['CalcFBHourglassForceForElems'], 'CalcFBHourglassForceForElems': [], 'IntegrateStressForElems': [], 'TimeIncrement': []}

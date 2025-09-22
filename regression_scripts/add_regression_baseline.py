@@ -13,6 +13,7 @@ import os
 sys.path.append("/Users/aschwanden1/min-venv-local/lib/python3.9/site-packages")
 sys.path.append("/")
 
+
 def add_baseline_for_dataset(dataset_path):
     """Add a regression baseline for a specific dataset"""
 
@@ -27,6 +28,7 @@ def add_baseline_for_dataset(dataset_path):
 
     # Check for .cali files
     import glob
+
     cali_files = glob.glob(os.path.join(dataset_path, "**", "*.cali"), recursive=True)
     if not cali_files:
         print(f"❌ Error: No .cali files found in {dataset_path}")
@@ -45,15 +47,19 @@ def add_baseline_for_dataset(dataset_path):
         "regression_scripts/regression_test_performance_CaliReader.py",
         "--update-baseline",
         "--dataset",
-        dataset_path
+        dataset_path,
     ]
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd="/Users/aschwanden1/treescape")
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, cwd="/Users/aschwanden1/treescape"
+        )
 
         if result.returncode == 0:
             print("✅ Baseline added successfully!")
-            print("💡 You can now run regression tests against this baseline for this specific dataset.")
+            print(
+                "💡 You can now run regression tests against this baseline for this specific dataset."
+            )
             success = True
         else:
             print("❌ Failed to add baseline")
@@ -72,6 +78,7 @@ def add_baseline_for_dataset(dataset_path):
 
     return success
 
+
 def show_usage():
     """Show usage information"""
     print("Add Regression Baseline Tool")
@@ -82,10 +89,14 @@ def show_usage():
     print()
     print("Examples:")
     print("  # Add baseline for test_plus_24c dataset")
-    print("  python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test_plus_24c")
+    print(
+        "  python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test_plus_24c"
+    )
     print()
     print("  # Add baseline for test dataset")
-    print("  python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test")
+    print(
+        "  python regression_scripts/add_regression_baseline.py /Users/aschwanden1/datasets/newdemo/test"
+    )
     print()
     print("This will create a separate baseline file for the specified dataset")
     print("in the regression_scripts/baseline_results/ directory.")
@@ -98,23 +109,29 @@ def show_usage():
             if os.path.isdir(item_path):
                 # Count .cali files
                 import glob
-                cali_count = len(glob.glob(os.path.join(item_path, "**", "*.cali"), recursive=True))
+
+                cali_count = len(
+                    glob.glob(os.path.join(item_path, "**", "*.cali"), recursive=True)
+                )
                 if cali_count > 0:
                     print(f"  • {item} ({cali_count} .cali files)")
     print()
     print("To see existing baselines:")
-    print("  python regression_scripts/regression_test_performance_CaliReader.py --list-info")
+    print(
+        "  python regression_scripts/regression_test_performance_CaliReader.py --list-info"
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     if len(sys.argv) != 2:
         show_usage()
         sys.exit(1)
-    
+
     dataset_path = sys.argv[1]
-    
+
     # Handle relative paths
     if not os.path.isabs(dataset_path):
         dataset_path = os.path.abspath(dataset_path)
-    
+
     success = add_baseline_for_dataset(dataset_path)
     sys.exit(0 if success else 1)

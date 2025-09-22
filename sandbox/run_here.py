@@ -14,9 +14,9 @@ m = MyTimer("start")
 caliReader = CaliReader("launchdate")
 
 mod = TreeScapeModel(caliReader)
-mod.setDrillLevel(['main'])
+mod.setDrillLevel(["main"])
 
 sl = StackedLine()
-sl.render( model=mod, drill_level=['LagrangeLeapFrog'] )
+sl.render(model=mod, drill_level=["LagrangeLeapFrog"])
 m.mark("finish render")
 m.print()

@@ -11,6 +11,7 @@ import time
 # Only import IPython if available (for Jupyter environments)
 try:
     from IPython.display import Javascript, JSON, display
+
     IPYTHON_AVAILABLE = True
 except ImportError:
     IPYTHON_AVAILABLE = False
@@ -24,7 +25,9 @@ class PythonPull:
     # Function to execute JavaScript and pass JSON back to Python
     def extract_json(self):
         if not IPYTHON_AVAILABLE:
-            print("Warning: IPython not available. Cannot extract JSON from JavaScript.")
+            print(
+                "Warning: IPython not available. Cannot extract JSON from JavaScript."
+            )
             return
 
         js_code = """
@@ -40,11 +43,10 @@ class PythonPull:
 
         display(Javascript(js_code))
 
-
     def exe(self):
         # Call the function to execute JS and extract the JSON
         self.extract_json()
-        #print(json_result)
+        # print(json_result)
 
         # Wait for the JavaScript execution to complete
         time.sleep(1)
@@ -57,17 +59,28 @@ class PythonPull:
         data = self.json_result
 
         # Extract data
-        x_timestamps = list(map(int, data[0]['nodes']['xaxis']))  # Convert timestamps to integers
-        y_values = data[0]['nodes']['ydata']
-        series_name = data[0]['nodes']['name']
+        x_timestamps = list(
+            map(int, data[0]["nodes"]["xaxis"])
+        )  # Convert timestamps to integers
+        y_values = data[0]["nodes"]["ydata"]
+        series_name = data[0]["nodes"]["name"]
 
         # Convert timestamps to datetime
         x_dates = [datetime.datetime.utcfromtimestamp(ts) for ts in x_timestamps]
 
         # Create the plot
         plt.figure(figsize=(10, 5))
-        plt.fill_between(x_dates, y_values, alpha=0.4, color='blue')  # Stacked effect with fill
-        plt.plot(x_dates, y_values, marker='o', linestyle='-', color='blue', label=series_name)
+        plt.fill_between(
+            x_dates, y_values, alpha=0.4, color="blue"
+        )  # Stacked effect with fill
+        plt.plot(
+            x_dates,
+            y_values,
+            marker="o",
+            linestyle="-",
+            color="blue",
+            label=series_name,
+        )
 
         # Formatting
         plt.xlabel("Date")
@@ -75,7 +88,7 @@ class PythonPull:
         plt.title("Stacked Line Plot - " + series_name)
         plt.xticks(rotation=45)
         plt.legend()
-        plt.grid(True, linestyle='--', alpha=0.6)
+        plt.grid(True, linestyle="--", alpha=0.6)
 
         # Show the plot
         plt.show()

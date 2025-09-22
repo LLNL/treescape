@@ -40,8 +40,6 @@ class TH_ens:
     def get_th_ens(self):
         return self.get_th_ens_impl()
 
-
-
     def get_th_ens_impl(self):
 
         if TH_ens.th_ens_defined == 0:
@@ -52,28 +50,28 @@ class TH_ens:
             from glob import glob
             import os
 
-            PATH = '/Users/aschwanden1/lulesh_gen/100/'
-            TH_ens.profiles = [y for x in os.walk(PATH) for y in glob(os.path.join(x[0], '*.cali'))]
+            PATH = "/Users/aschwanden1/lulesh_gen/100/"
+            TH_ens.profiles = [
+                y for x in os.walk(PATH) for y in glob(os.path.join(x[0], "*.cali"))
+            ]
 
             #  this contains some metadata we need.
             #  also contains the tree data.
-            #print( TH_ens.profiles )
+            # print( TH_ens.profiles )
 
             TH_ens.th_ens = tt.Thicket.from_caliperreader(TH_ens.profiles)
 
-            #TH_ens.th_ens.dataframe.reset_index(drop=True, inplace=True)
-            #TH_ens.th_ens.dataframe = pd.concat([TH_ens.th_ens.dataframe, TH_ens.th_ens.dataframe], ignore_index=True)
+            # TH_ens.th_ens.dataframe.reset_index(drop=True, inplace=True)
+            # TH_ens.th_ens.dataframe = pd.concat([TH_ens.th_ens.dataframe, TH_ens.th_ens.dataframe], ignore_index=True)
 
-            #TH_ens.th_ens.metadata.reset_index(drop=True, inplace=True)
-            #TH_ens.th_ens.metadata = pd.concat([TH_ens.th_ens.metadata, TH_ens.th_ens.metadata], ignore_index=True)
+            # TH_ens.th_ens.metadata.reset_index(drop=True, inplace=True)
+            # TH_ens.th_ens.metadata = pd.concat([TH_ens.th_ens.metadata, TH_ens.th_ens.metadata], ignore_index=True)
             MyTimer("get_th_ens()")
 
-            #tms = ThicketMultiplierStub(TH_ens.th_ens)
+            # tms = ThicketMultiplierStub(TH_ens.th_ens)
             MyTimer("MultiplierStub()")
 
         return TH_ens.th_ens, TH_ens.profiles
-
-
 
 
 class ThicketReader(Reader):
@@ -83,10 +81,8 @@ class ThicketReader(Reader):
         self.profiles = profiles
         self.xaxis = xaxis
 
-
     def get_x_axis(self):
         return self.xaxis
-
 
     def get_all_xaxis(self):
 
@@ -100,20 +96,19 @@ class ThicketReader(Reader):
 
             return xaxis_arr
 
-
     def get_entire(self):
 
         # PSTUB
         from GraphTraverseModel import GraphTraverseModel
 
         gtm = GraphTraverseModel(self.th_ens, self.profiles)
-        #childrenMap = {'main': ['lulesh.cycle'], 'lulesh.cycle': ['TimeIncrement', 'LagrangeLeapFrog'], 'LagrangeLeapFrog': ['LagrangeNodal', 'LagrangeElements', 'CalcTimeConstraintsForElems'], 'CalcTimeConstraintsForElems': [], 'LagrangeElements': ['CalcLagrangeElements', 'CalcQForElems', 'ApplyMaterialPropertiesForElems'], 'ApplyMaterialPropertiesForElems': ['EvalEOSForElems'], 'EvalEOSForElems': ['CalcEnergyForElems'], 'CalcEnergyForElems': [], 'CalcLagrangeElements': ['CalcKinematicsForElems'], 'CalcKinematicsForElems': [], 'CalcQForElems': ['CalcMonotonicQForElems'], 'CalcMonotonicQForElems': [], 'LagrangeNodal': ['CalcForceForNodes'], 'CalcForceForNodes': ['CalcVolumeForceForElems'], 'CalcVolumeForceForElems': ['IntegrateStressForElems', 'CalcHourglassControlForElems'], 'CalcHourglassControlForElems': ['CalcFBHourglassForceForElems'], 'CalcFBHourglassForceForElems': [], 'IntegrateStressForElems': [], 'TimeIncrement': []}
+        # childrenMap = {'main': ['lulesh.cycle'], 'lulesh.cycle': ['TimeIncrement', 'LagrangeLeapFrog'], 'LagrangeLeapFrog': ['LagrangeNodal', 'LagrangeElements', 'CalcTimeConstraintsForElems'], 'CalcTimeConstraintsForElems': [], 'LagrangeElements': ['CalcLagrangeElements', 'CalcQForElems', 'ApplyMaterialPropertiesForElems'], 'ApplyMaterialPropertiesForElems': ['EvalEOSForElems'], 'EvalEOSForElems': ['CalcEnergyForElems'], 'CalcEnergyForElems': [], 'CalcLagrangeElements': ['CalcKinematicsForElems'], 'CalcKinematicsForElems': [], 'CalcQForElems': ['CalcMonotonicQForElems'], 'CalcMonotonicQForElems': [], 'LagrangeNodal': ['CalcForceForNodes'], 'CalcForceForNodes': ['CalcVolumeForceForElems'], 'CalcVolumeForceForElems': ['IntegrateStressForElems', 'CalcHourglassControlForElems'], 'CalcHourglassControlForElems': ['CalcFBHourglassForceForElems'], 'CalcFBHourglassForceForElems': [], 'IntegrateStressForElems': [], 'TimeIncrement': []}
         childrenMap = gtm.getParentToChildMapping()
-        #parentMap = {'lulesh.cycle': 'main', 'TimeIncrement': 'lulesh.cycle', 'LagrangeLeapFrog': 'lulesh.cycle', 'LagrangeNodal': 'LagrangeLeapFrog', 'LagrangeElements': 'LagrangeLeapFrog', 'CalcTimeConstraintsForElems': 'LagrangeLeapFrog', 'CalcLagrangeElements': 'LagrangeElements', 'CalcQForElems': 'LagrangeElements', 'ApplyMaterialPropertiesForElems': 'LagrangeElements', 'EvalEOSForElems': 'ApplyMaterialPropertiesForElems', 'CalcEnergyForElems': 'EvalEOSForElems', 'CalcKinematicsForElems': 'CalcLagrangeElements', 'CalcMonotonicQForElems': 'CalcQForElems', 'CalcForceForNodes': 'LagrangeNodal', 'CalcVolumeForceForElems': 'CalcForceForNodes', 'IntegrateStressForElems': 'CalcVolumeForceForElems', 'CalcHourglassControlForElems': 'CalcVolumeForceForElems', 'CalcFBHourglassForceForElems': 'CalcHourglassControlForElems'}
+        # parentMap = {'lulesh.cycle': 'main', 'TimeIncrement': 'lulesh.cycle', 'LagrangeLeapFrog': 'lulesh.cycle', 'LagrangeNodal': 'LagrangeLeapFrog', 'LagrangeElements': 'LagrangeLeapFrog', 'CalcTimeConstraintsForElems': 'LagrangeLeapFrog', 'CalcLagrangeElements': 'LagrangeElements', 'CalcQForElems': 'LagrangeElements', 'ApplyMaterialPropertiesForElems': 'LagrangeElements', 'EvalEOSForElems': 'ApplyMaterialPropertiesForElems', 'CalcEnergyForElems': 'EvalEOSForElems', 'CalcKinematicsForElems': 'CalcLagrangeElements', 'CalcMonotonicQForElems': 'CalcQForElems', 'CalcForceForNodes': 'LagrangeNodal', 'CalcVolumeForceForElems': 'CalcForceForNodes', 'IntegrateStressForElems': 'CalcVolumeForceForElems', 'CalcHourglassControlForElems': 'CalcVolumeForceForElems', 'CalcFBHourglassForceForElems': 'CalcHourglassControlForElems'}
         parentMap = gtm.getChildToParentMapping()
 
-        #print(childrenMap)
-        #print(parentMap)
+        # print(childrenMap)
+        # print(parentMap)
 
         MyTimer("GraphTraverseModel")
 
@@ -123,12 +118,7 @@ class ThicketReader(Reader):
         for xaxis in xaxis_arr:
             nodes[xaxis] = self.get_entire_for_xaxis(xaxis)
 
-        return {
-            "nodes": nodes,
-            "childrenMap": childrenMap,
-            "parentMap": parentMap
-        }
-
+        return {"nodes": nodes, "childrenMap": childrenMap, "parentMap": parentMap}
 
     def get_entire_for_xaxis(self, xaxis_name):
 
@@ -139,9 +129,8 @@ class ThicketReader(Reader):
             # Access each column in the row
             metaobj_idx_by_profile[profile] = row
 
-
         MyTimer("get_entire_for_xaxis - metaobj")
-        #print(metaobj_idx_by_profile)
+        # print(metaobj_idx_by_profile)
         sumArr = {}
         count = {}
         howmany = 0
@@ -155,14 +144,14 @@ class ThicketReader(Reader):
         #  YAxis: Now let's get the actual duration values, like the average durations.
         for index, row in df.iterrows():
             # Accessing individual elements in the row
-            #print("row====")
-            #print(row)
+            # print("row====")
+            # print(row)
 
             howmany += 1
 
-            avg_duration = row['avg#inclusive#sum#time.duration']
-            name = row['name']
-            profile = row['profile']
+            avg_duration = row["avg#inclusive#sum#time.duration"]
+            name = row["name"]
+            profile = row["profile"]
 
             if name not in sumArr:
                 sumArr[name] = {}
@@ -177,30 +166,28 @@ class ThicketReader(Reader):
                 ldate = float(ldate)
 
             if ldate in sumArr[name]:
-                sumArr[name][ldate]['sum'] += avg_duration
+                sumArr[name][ldate]["sum"] += avg_duration
                 count[name][ldate] += 1
 
-                if avg_duration < sumArr[name][ldate]['min']:
-                    sumArr[name][ldate]['min'] = avg_duration
+                if avg_duration < sumArr[name][ldate]["min"]:
+                    sumArr[name][ldate]["min"] = avg_duration
 
-                if avg_duration > sumArr[name][ldate]['max']:
-                    sumArr[name][ldate]['max'] = avg_duration
+                if avg_duration > sumArr[name][ldate]["max"]:
+                    sumArr[name][ldate]["max"] = avg_duration
             else:
                 sumArr[name][ldate] = {
-                    'sum': avg_duration,
-                    'min': 1000,
-                    'max': 0,
-                    'avg': 0
+                    "sum": avg_duration,
+                    "min": 1000,
+                    "max": 0,
+                    "avg": 0,
                 }
 
                 count[name][ldate] = 0
 
+        uniq_date = len(sumArr["main"])
+        print("uniq_date=" + str(uniq_date))
 
-
-        uniq_date = len( sumArr['main'] )
-        print('uniq_date=' + str(uniq_date))
-
-        print('howmany=' + str(howmany))
+        print("howmany=" + str(howmany))
         MyTimer("get_entire_for_xaxis - iterrows")
 
         renderDat = {}
@@ -210,14 +197,17 @@ class ThicketReader(Reader):
         # Convert the dictionary to a list of tuples (launchDate, data)
 
         for name, launchData in sumArr.items():
-            launch_list = [(launchDate, data) for launchDate, data in launchData.items()]
-            sorted_launch_list = sorted(launch_list,
-                                        key=lambda x: (float(x[0]) if isinstance(x[0], (int, float)) else x[0]))
+            launch_list = [
+                (launchDate, data) for launchDate, data in launchData.items()
+            ]
+            sorted_launch_list = sorted(
+                launch_list,
+                key=lambda x: (float(x[0]) if isinstance(x[0], (int, float)) else x[0]),
+            )
 
             renderDat[name] = [data for _, data in sorted_launch_list]
             ldates[name] = [launchDate for launchDate, _ in sorted_launch_list]
             nameOfLinesToPlot.append(name)
-
 
         entireNodes = []
 
@@ -225,33 +215,31 @@ class ThicketReader(Reader):
         #  it's the plot's name at the top.
         for name in renderDat:
 
-            ordered = self.order_strings( ldates[name] )
+            ordered = self.order_strings(ldates[name])
 
-            entireNodes.append({
-                "name": name,
-                "ydata": renderDat[name],
-                "xaxis": ordered
-            })
+            entireNodes.append(
+                {"name": name, "ydata": renderDat[name], "xaxis": ordered}
+            )
 
         MyTimer("get_entire_for_xaxis - renderDat")
 
         return entireNodes
 
-
     def order_strings(self, unsor_arr):
         # Check if the array contains strings with numbers
-        if all(isinstance(s, str) and s.replace('.', '').isdigit() for s in unsor_arr):
+        if all(isinstance(s, str) and s.replace(".", "").isdigit() for s in unsor_arr):
             # Order the strings in numerical order
             ordered_arr = sorted(unsor_arr, key=lambda x: float(x))
             return ordered_arr
         else:
             return unsor_arr
 
-
     def test(self):
         print(f"hello45")
-        PATH = '/Users/aschwanden1/lulesh_gen/'
-        profiles = [y for x in os.walk(PATH) for y in glob(os.path.join(x[0], '*.cali'))]
+        PATH = "/Users/aschwanden1/lulesh_gen/"
+        profiles = [
+            y for x in os.walk(PATH) for y in glob(os.path.join(x[0], "*.cali"))
+        ]
 
         th_ens = tt.Thicket.from_caliperreader(profiles)
 

@@ -12,7 +12,6 @@ class GraphTraverseModel:
         self.profiles = profiles
         self.makeMappings()
 
-
     def makeMappings(self):
 
         self.idxByChild = {}
@@ -20,26 +19,23 @@ class GraphTraverseModel:
 
         for i, mynode in enumerate(self.th_ens.graph.traverse()):
 
-            name = mynode.frame['name']
+            name = mynode.frame["name"]
             childrenNames = []
 
             for index, childNode in enumerate(mynode.children):
-                childName = childNode.frame['name']
+                childName = childNode.frame["name"]
                 childrenNames.append(childName)
 
                 self.idxByChild[childName] = name
 
             self.idxByParent[name] = childrenNames
 
-
     #  needed by JS side to traverse tree
     def getParentToChildMapping(self):
         return self.idxByParent
 
-
     def getChildToParentMapping(self):
         return self.idxByChild
-
 
     #  useful for Python side.
     def getChildrenNamesFor(self, parent):
@@ -48,15 +44,14 @@ class GraphTraverseModel:
 
         for i, mynode in enumerate(self.th_ens.graph.traverse()):
 
-            if mynode.frame['name'] == parent:
-                #print("  children=", mynode.children)
-                #print("  parents=", mynode.parents)
+            if mynode.frame["name"] == parent:
+                # print("  children=", mynode.children)
+                # print("  parents=", mynode.parents)
 
                 for index, childNode in enumerate(mynode.children):
 
-                    childName = childNode.frame['name']
-                    childrenNames.append( childName )
+                    childName = childNode.frame["name"]
+                    childrenNames.append(childName)
 
-        #print(childrenNames)
+        # print(childrenNames)
         return childrenNames
-

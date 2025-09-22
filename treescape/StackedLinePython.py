@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 import matplotlib
+
 matplotlib.use("Agg")  # Use a non-interactive backend for image generation
 import matplotlib.pyplot as plt
 
@@ -22,21 +23,17 @@ class StackedLinePython:
         self.yMax = None
         self.yMin = None
 
-        self.xaxis_agg = 'sum'
-        self.yaxis = 'avg'
-
+        self.xaxis_agg = "sum"
+        self.yaxis = "avg"
 
     def setYAxis(self, yaxis):
         self.yaxis = yaxis
 
-
     def setYMax(self, yMax):
         self.yMax = yMax
 
-
     def setYMin(self, yMin):
         self.yMin = yMin
-
 
     def plot_sums(self, metavar, node_names):
         """
@@ -52,7 +49,20 @@ class StackedLinePython:
         """
         epoch_timestamp = int(epoch_timestamp)
         date = datetime.fromtimestamp(epoch_timestamp)
-        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ]
         return f"{date.year}-{months[date.month - 1]}-{date.day:02d} {date.hour:02d}:{date.minute:02d}:{date.second:02d}"
 
     def plot_stacked_sums(self, tests, metavar, node_names):
@@ -71,7 +81,7 @@ class StackedLinePython:
 
         # Step 1: Collect data for each node
         for test in tests:
-            if hasattr(test, 'perftree') and isinstance(test.perftree, dict):
+            if hasattr(test, "perftree") and isinstance(test.perftree, dict):
                 myx = test.metadata[metavar]
                 myx = self.convert_to_number(myx)
                 if metavar == "launchday":
@@ -82,7 +92,9 @@ class StackedLinePython:
                 for node in node_names:
                     if node in test.perftree and self.yaxis in test.perftree[node]:
                         test_data[node][test_name][0].append(myx)
-                        test_data[node][test_name][1].append(float(test.perftree[node][self.yaxis]))
+                        test_data[node][test_name][1].append(
+                            float(test.perftree[node][self.yaxis])
+                        )
 
         # Step 2: Collect all global x-values and map each node's data to them
         global_x_vals = set()
@@ -93,7 +105,6 @@ class StackedLinePython:
                 for x, y in zip(x_vals, y_vals):
                     global_x_vals.add(x)
                     node_to_xy[node].append((x, y))
-
 
         global_x_sorted = sorted(global_x_vals)
         x_index = {x: i for i, x in enumerate(global_x_sorted)}
@@ -109,10 +120,10 @@ class StackedLinePython:
         # For topmax aggregation, we need to collect "main" node data to determine the index
         # Use the same data collection loop as the main data to ensure consistency
         main_temp = defaultdict(list)
-        if self.xaxis_agg == 'topmax':
+        if self.xaxis_agg == "topmax":
             # Use the original tests parameter to ensure consistency
             for test in original_tests:
-                if hasattr(test, 'perftree') and isinstance(test.perftree, dict):
+                if hasattr(test, "perftree") and isinstance(test.perftree, dict):
                     myx = test.metadata[metavar]
                     myx = self.convert_to_number(myx)
                     if metavar == "launchday":
@@ -121,10 +132,13 @@ class StackedLinePython:
                     if myx in x_index:  # Make sure this x value is in our index
                         idx = x_index[myx]
 
-
-
-                        if 'main' in test.perftree and self.yaxis in test.perftree['main']:
-                            main_temp[idx].append(float(test.perftree['main'][self.yaxis]))
+                        if (
+                            "main" in test.perftree
+                            and self.yaxis in test.perftree["main"]
+                        ):
+                            main_temp[idx].append(
+                                float(test.perftree["main"][self.yaxis])
+                            )
 
         # Initialize y_matrix
         y_matrix = np.zeros((len(node_names), len(x_index)))
@@ -134,22 +148,22 @@ class StackedLinePython:
 
         # For topmax, pre-calculate the topmax indices based on main node
         topmax_indices = {}
-        if agg_func == 'topmax':
+        if agg_func == "topmax":
             for idx, main_values in main_temp.items():
                 if main_values:  # Make sure we have values
                     topmax_indices[idx] = main_values.index(max(main_values))
 
         # Apply aggregation
         for (i, idx), values in temp.items():
-            if agg_func == 'sum':
+            if agg_func == "sum":
                 y_matrix[i][idx] = sum(values)
-            elif agg_func == 'avg':
+            elif agg_func == "avg":
                 y_matrix[i][idx] = sum(values) / len(values)
-            elif agg_func == 'min':
+            elif agg_func == "min":
                 y_matrix[i][idx] = min(values)
-            elif agg_func == 'max':
+            elif agg_func == "max":
                 y_matrix[i][idx] = max(values)
-            elif agg_func == 'topmax':
+            elif agg_func == "topmax":
                 # Use the index determined by the main node's maximum value
                 if idx in topmax_indices and topmax_indices[idx] < len(values):
                     y_matrix[i][idx] = values[topmax_indices[idx]]
@@ -162,18 +176,36 @@ class StackedLinePython:
         colors = [self.spot2_color_hash(str(node)) for node in node_names]
 
         for i, node in enumerate(node_names):
-            plt.fill_between(global_x_sorted, prev_sums, prev_sums + y_matrix[i],
-                             label=f"Node {node}", color=colors[i], alpha=0.6)
+            plt.fill_between(
+                global_x_sorted,
+                prev_sums,
+                prev_sums + y_matrix[i],
+                label=f"Node {node}",
+                color=colors[i],
+                alpha=0.6,
+            )
             prev_sums += y_matrix[i]
 
         # Step 5: Format x-axis
         formatted_labels = [self.launchday_to_date(x) for x in global_x_sorted]
-        plt.xticks(ticks=global_x_sorted, labels=formatted_labels, rotation=45, ha='right')
+        plt.xticks(
+            ticks=global_x_sorted, labels=formatted_labels, rotation=45, ha="right"
+        )
 
         # Save to file
         pstr = "_".join(node_names)
-        filename = self.directory + "yaxis=" + self.yaxis + " xagg=" + self.xaxis_agg + " test=" + \
-                   self.testname + "_" + pstr + ".svg"
+        filename = (
+            self.directory
+            + "yaxis="
+            + self.yaxis
+            + " xagg="
+            + self.xaxis_agg
+            + " test="
+            + self.testname
+            + "_"
+            + pstr
+            + ".svg"
+        )
 
         plt.xlabel(metavar)
         plt.ylabel("Summed Values")
@@ -189,10 +221,8 @@ class StackedLinePython:
         plt.savefig(filename, format="svg")
         plt.close()
 
-
     def setXAggregation(self, xagg):
         self.xaxis_agg = xagg
-
 
     def spot2_color_hash(self, text, alpha=0.6):
         reverse_string = text[::-1]
@@ -208,7 +238,9 @@ class StackedLinePython:
         Groups and sums values for duplicate x-axis labels.
         """
         unique_a = sorted(set(a))
-        summed_b = [sum(b[i] for i in range(len(a)) if a[i] == value) for value in unique_a]
+        summed_b = [
+            sum(b[i] for i in range(len(a)) if a[i] == value) for value in unique_a
+        ]
         return np.array(unique_a), np.array(summed_b)
 
     def convert_to_number(self, s):

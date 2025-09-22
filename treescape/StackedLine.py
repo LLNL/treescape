@@ -5,7 +5,7 @@
 
 from .Reader import Reader
 from .TreeScapeModel import TreeScapeModel
-from .StackedLinePython import  StackedLinePython
+from .StackedLinePython import StackedLinePython
 import os
 
 
@@ -25,7 +25,6 @@ class StackedLine:
     # metrics
     INCLUSIVE_AVG = "avg#inclusive#sum#time.duration"
 
-
     def __init__(self):
 
         self.nameOfLinesToPlot = None
@@ -36,15 +35,14 @@ class StackedLine:
         #  Just user doesn't set a height we don't want it to be super tall.
         self.height = 400
 
-        self.xaxis_agg = 'sum'
+        self.xaxis_agg = "sum"
         self.container_id = 0
 
         # default of launchdate
-        self.setXAxis('launchdate')
-        self.setYAxis('avg')
+        self.setXAxis("launchdate")
+        self.setYAxis("avg")
 
-        self.setComponents( [StackedLine.LINEGRAPHS, StackedLine.FLAMEGRAPHS] )
-
+        self.setComponents([StackedLine.LINEGRAPHS, StackedLine.FLAMEGRAPHS])
 
     def setXAxis(self, xaxis_name: str):
         """
@@ -56,7 +54,6 @@ class StackedLine:
         """
         self.xaxis_name = xaxis_name
 
-
     def setYAxis(self, yaxis_name: str):
         """
         You can set the Y axis of the stacked line chart you want to see.  the name given
@@ -66,13 +63,17 @@ class StackedLine:
         :return:
         """
 
-        valid_options = {StackedLine.SUM, StackedLine.AVG, StackedLine.MAX, StackedLine.MIN}
+        valid_options = {
+            StackedLine.SUM,
+            StackedLine.AVG,
+            StackedLine.MAX,
+            StackedLine.MIN,
+        }
 
         if yaxis_name not in valid_options:
             print(f"Validation Error: '{yaxis_name}' is not a valid yAxis option.")
 
         self.yaxis_name = yaxis_name
-
 
     def setXAggregation(self, aggregation: str):
         """
@@ -87,14 +88,15 @@ class StackedLine:
             StackedLine.AVG,
             StackedLine.MAX,
             StackedLine.MIN,
-            StackedLine.TOPMAX
+            StackedLine.TOPMAX,
         }
 
         if aggregation not in valid_options:
-            print(f"Validation Error: '{aggregation}' is not a valid aggregation option.")
+            print(
+                f"Validation Error: '{aggregation}' is not a valid aggregation option."
+            )
 
         self.xaxis_agg = aggregation
-
 
     def errorOut(self, str):
         # Bold red text
@@ -111,14 +113,15 @@ class StackedLine:
         invalid_values = [value for value in components if value not in valid_options]
 
         if invalid_values:
-            self.errorOut(f"Validation Error: The following values are not valid component options: {invalid_values}")
+            self.errorOut(
+                f"Validation Error: The following values are not valid component options: {invalid_values}"
+            )
             return False
 
         import json
+
         jstr = json.dumps(components, indent=4)
-        self.components = ';ST.components = ' + jstr + ';'
-
-
+        self.components = ";ST.components = " + jstr + ";"
 
     def setDrillLevel(self, nameOfLinesToPlot):
         """
@@ -136,7 +139,6 @@ class StackedLine:
 
         self.nameOfLinesToPlot = nameOfLinesToPlot
 
-
     def setYMax(self, yMax):
         self.yMax = yMax
 
@@ -149,8 +151,7 @@ class StackedLine:
     def setHeight(self, height):
         self.height = height
 
-
-    def get_PJ_bus(self, xaxis ):
+    def get_PJ_bus(self, xaxis):
         """
 
         For internal use.  The PJ bus allows Python variables to be sent down to the
@@ -162,11 +163,11 @@ class StackedLine:
         self.xaxis_name = xaxis
         self.entireForest = self.tsm.get_entire_tsm()
 
-        cm = self.entireForest['childrenMap']
+        cm = self.entireForest["childrenMap"]
         iterator = iter(cm)
         theKey = "not present"
 
-        perftree = self.entireForest['nodes'][0]['perftree']
+        perftree = self.entireForest["nodes"][0]["perftree"]
 
         while theKey not in perftree:
             try:
@@ -177,36 +178,33 @@ class StackedLine:
                 print("No more keys in 'cm'. Exiting loop.")
                 break
 
-        #print(perftree)
+        # print(perftree)
 
         if self.nameOfLinesToPlot is None:
             self.setDrillLevel([theKey])
 
-
         ret = {
-            'entireForest': self.entireForest,
-            'nameOfLinesToPlot': self.nameOfLinesToPlot,
-            'xaxis_name': self.xaxis_name,
+            "entireForest": self.entireForest,
+            "nameOfLinesToPlot": self.nameOfLinesToPlot,
+            "xaxis_name": self.xaxis_name,
         }
 
         if self.width is not None:
-            ret['set_width'] = self.width
+            ret["set_width"] = self.width
 
         if self.height is not None:
-            ret['set_height'] = self.height
+            ret["set_height"] = self.height
 
         if self.yMax is not None:
-            ret['yMax'] = self.yMax
+            ret["yMax"] = self.yMax
 
         if self.yMin is not None:
-            ret['yMin'] = self.yMin
+            ret["yMin"] = self.yMin
 
-        ret['xaxis_agg'] = self.xaxis_agg
-        ret['yAxis'] = self.yaxis_name
+        ret["xaxis_agg"] = self.xaxis_agg
+        ret["yAxis"] = self.yaxis_name
 
         return ret
-
-
 
     def render(self, tsm_or_list, **kwargs):
         """
@@ -224,7 +222,7 @@ class StackedLine:
 
         :return:
         """
-        if isinstance( tsm_or_list, TreeScapeModel ):
+        if isinstance(tsm_or_list, TreeScapeModel):
             self.tsm = tsm_or_list
         else:
             #  it's a list so make the TreeScapeModel.
@@ -233,63 +231,75 @@ class StackedLine:
                 if r.read_from:
                     reader = r.read_from
                     break
-            self.tsm = TreeScapeModel( reader, tsm_or_list )
+            self.tsm = TreeScapeModel(reader, tsm_or_list)
 
         for key, value in kwargs.items():
             print(f"{key}: {value}")
 
-        if 'drill_level' in kwargs:
-            self.setDrillLevel( kwargs['drill_level'] )
+        if "drill_level" in kwargs:
+            self.setDrillLevel(kwargs["drill_level"])
 
         components = ";ST.components = ['linegraph', 'flamegraph'];"  # default is both.
 
-        if 'xaggregation' in kwargs:
-            self.setXAggregation( kwargs['xaggregation'])
+        if "xaggregation" in kwargs:
+            self.setXAggregation(kwargs["xaggregation"])
 
-        if 'components' in kwargs:
-            self.setComponents( kwargs['components'])
+        if "components" in kwargs:
+            self.setComponents(kwargs["components"])
 
-        if 'ymin' in kwargs:
-            self.setYMin( kwargs['ymin'] )
+        if "ymin" in kwargs:
+            self.setYMin(kwargs["ymin"])
 
-        if 'ymax' in kwargs:
-            self.setYMax( kwargs['ymax'] )
+        if "ymax" in kwargs:
+            self.setYMax(kwargs["ymax"])
 
         make_stub = ""
-        if 'make_stub' in kwargs and kwargs['make_stub'] == 1:
-            make_stub = ';ST.MAKE_STUB = true;'
+        if "make_stub" in kwargs and kwargs["make_stub"] == 1:
+            make_stub = ";ST.MAKE_STUB = true;"
 
         xaxis = self.xaxis_name
-        if 'xaxis' in kwargs:
-            xaxis = kwargs['xaxis']
+        if "xaxis" in kwargs:
+            xaxis = kwargs["xaxis"]
 
         file_content = ""
 
-        files = ["jquery.js", "chartmin.js",
-            "SelectView.js", "FlameGraphModel.js", "FlameGraphView.js",
-                 "stacked.js", "TreeScapeModel.js", "CurrentPlotModel.js",
-                 "StackedLine.js", "ModifyPJ_BusStubModel.js", "jmd5.js", "MultiLineChart.js"
-                 #"vue.js",
-                 #"incrementExample.js"
-                 ]
+        files = [
+            "jquery.js",
+            "chartmin.js",
+            "SelectView.js",
+            "FlameGraphModel.js",
+            "FlameGraphView.js",
+            "stacked.js",
+            "TreeScapeModel.js",
+            "CurrentPlotModel.js",
+            "StackedLine.js",
+            "ModifyPJ_BusStubModel.js",
+            "jmd5.js",
+            "MultiLineChart.js",
+            # "vue.js",
+            # "incrementExample.js"
+        ]
 
         deploy_directory = os.path.dirname(os.path.abspath(__file__)) + "/../"
 
         for file_path in files:
             # Open the file and read its contents
-            with open( deploy_directory + "js/" + file_path, 'r') as file:
+            with open(deploy_directory + "js/" + file_path, "r") as file:
                 file_content += file.read()
 
         import json
 
         from IPython.display import display, Javascript, HTML
 
-        bus_serialization = self.get_PJ_bus( xaxis )
+        bus_serialization = self.get_PJ_bus(xaxis)
         jds = json.dumps(bus_serialization)
         code = file_content.replace("PJ_BUS_REPLACE_JS", jds)
 
-        import random, string; 
-        self.container_id = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        import random, string
+
+        self.container_id = "".join(
+            random.choices(string.ascii_letters + string.digits, k=10)
+        )
 
         container_var = ';var container_id = "' + str(self.container_id) + '";'
 
@@ -298,36 +308,38 @@ class StackedLine:
         scr = '<script src="https://cdn.jsdelivr.net/npm/jquery.md5@1.0.2/index.min.js?a=3"></script>'
 
         styleCSS = open(deploy_directory + "stacked.css").read()
-        #display(HTML('<link rel="stylesheet" href="../stacked.css">' ))
-        display(HTML('<style>' + styleCSS + '</style>' ))
-       
+        # display(HTML('<link rel="stylesheet" href="../stacked.css">' ))
+        display(HTML("<style>" + styleCSS + "</style>"))
+
         #  this does not work.
         #  on localhost we have to use custom.js
-        #display(HTML('<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'))
+        # display(HTML('<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'))
 
-        display(Javascript( code ))
-        
-        html_content = '<div container_id="' + str(self.container_id) + '" class="stacked-line-component"></div>'
+        display(Javascript(code))
+
+        html_content = (
+            '<div container_id="'
+            + str(self.container_id)
+            + '" class="stacked-line-component"></div>'
+        )
         display(HTML(html_content))
-
 
     def getLibs(self):
 
-        with open("../js/md5.js", 'r') as file:
+        with open("../js/md5.js", "r") as file:
             file_content = file.read()
 
         return file_content
 
-
     def getVersion(self):
         return "1.23"
 
-    def exportSVG(self, directory, all_tests, metavar, node_names, testname ):
+    def exportSVG(self, directory, all_tests, metavar, node_names, testname):
 
-        slp = StackedLinePython( directory, all_tests, testname )
-        slp.setYMax( self.yMax )
-        slp.setYMin( self.yMin )
-        slp.setXAggregation( self.xaxis_agg )
-        slp.setYAxis( self.yaxis_name )
+        slp = StackedLinePython(directory, all_tests, testname)
+        slp.setYMax(self.yMax)
+        slp.setYMin(self.yMin)
+        slp.setXAggregation(self.xaxis_agg)
+        slp.setYAxis(self.yaxis_name)
 
-        slp.plot_sums( metavar, node_names )
+        slp.plot_sums(metavar, node_names)

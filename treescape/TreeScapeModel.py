@@ -15,29 +15,24 @@ class Run:
         self.perftree = perftree
         self.read_from = reader
 
-
     def __str__(self):
         return str(self.to_dict())
 
     def to_dict(self):
-        return {
-            "metadata": self.metadata,
-            "perftree": self.perftree
-        }
+        return {"metadata": self.metadata, "perftree": self.perftree}
 
     def getMetaData(self, key):
-        return self.metadata[ key ]
+        return self.metadata[key]
 
     def getPerfTree(self, node, metric):
         return self.perftree[node][metric]
 
     def getChildrenForNode(self, node):
-        return # list of the node's children
+        return  # list of the node's children
 
     def getParentForNode(self, node):
         # main has not parent so return None.
-        return #parent
-
+        return  # parent
 
 
 # this should hold the data
@@ -46,7 +41,7 @@ class Run:
 # this is what should be user iteratable and they iterate over the runs.
 class TreeScapeModel(list):
 
-    def __init__(self, reader: Reader, updated_list=None ):
+    def __init__(self, reader: Reader, updated_list=None):
         """
 
         :param th_ens: this comes from the get_th_ens function the user should define.
@@ -56,11 +51,10 @@ class TreeScapeModel(list):
         """
 
         if updated_list is not None:
-            self.init_with_reader( reader )
-            self.update( updated_list )
+            self.init_with_reader(reader)
+            self.update(updated_list)
         else:
-            self.init_with_reader( reader )
-
+            self.init_with_reader(reader)
 
     def init_with_reader(self, reader):
 
@@ -69,10 +63,10 @@ class TreeScapeModel(list):
         #  problem_size, launchdate, iterations
         #  default xaxis_name
         etc = self.reader.get_entire()
-        et = etc['nodes']
+        et = etc["nodes"]
 
-        self.childrenMap = etc['childrenMap']
-        self.meta_globals = etc['meta_globals']
+        self.childrenMap = etc["childrenMap"]
+        self.meta_globals = etc["meta_globals"]
 
         # Initialize the transformed data list
         tsm_data = []
@@ -83,55 +77,48 @@ class TreeScapeModel(list):
             for i, metadata in enumerate(value["xaxis"]):
                 # Find or create the entry for the current index
                 if len(tsm_data) <= i:
-                    tsm_data.append({
-                        "metadata": {},
-                        "perftree": {}
-                    })
+                    tsm_data.append({"metadata": {}, "perftree": {}})
 
                 # Add or update the metadata and perftree
                 tsm_data[i]["metadata"] = metadata
 
                 # Ensure the current key is in perftree
-                tsm_data[i]["perftree"][key] = value["ydata"][i] if i < len(value["ydata"]) else None
+                tsm_data[i]["perftree"][key] = (
+                    value["ydata"][i] if i < len(value["ydata"]) else None
+                )
 
                 # hack for now to get it working initially
                 # TODO: FIX!
                 if "perftree" in tsm_data[i] and "n" in tsm_data[i]["perftree"]:
                     tsm_data[i]["perftree"]["main"] = tsm_data[i]["perftree"]["n"]
 
-
         tsm_runs = []
         for index, td_obj in enumerate(tsm_data):
-            r0 = Run( td_obj['metadata'], td_obj['perftree'], reader )
-            tsm_runs.append( r0 )
+            r0 = Run(td_obj["metadata"], td_obj["perftree"], reader)
+            tsm_runs.append(r0)
 
         tsm_data = tsm_runs
-
 
         self.runs = tsm_data
         super().__init__(tsm_data)
 
-
     def get_meta_globals(self):
         return self.meta_globals
 
-
     def get_children_map(self):
         return self.childrenMap
-
 
     def update(self, new_tsm_list):
         self.runs = new_tsm_list
         super().__init__(new_tsm_list)
 
-
     def getMetrics(self):
-        return set ["min time/rank", "max time/rank", "avg time/rank"]
+        return set["min time/rank", "max time/rank", "avg time/rank"]
 
     #  metadata_key could be "jobsize", "problem_size"
     #  for complex stuff, they will call sorted themselves on our tsm object
     def sort(self, metadata_key: str):
-        sorted( self.runs, key=lambda run:run.metadata[metadata_key])
+        sorted(self.runs, key=lambda run: run.metadata[metadata_key])
 
     #  return a new TreeScapeModel
     #  only the runs that have a certain run.metadata value
@@ -147,5 +134,5 @@ class TreeScapeModel(list):
         return {
             "nodes": rns,
             "childrenMap": self.childrenMap,
-            "meta_globals": self.meta_globals
+            "meta_globals": self.meta_globals,
         }

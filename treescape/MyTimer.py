@@ -5,6 +5,7 @@
 
 import time
 
+
 class MyTimer:
     def __init__(self):
         self.start_time = time.perf_counter()
@@ -25,7 +26,9 @@ class MyTimer:
 
         # Print header
         headers = ("From", "To", "Interval (s)", "Total (s)")
-        col_widths = [max(len(str(row[i])) for row in ([headers] + results)) for i in range(4)]
+        col_widths = [
+            max(len(str(row[i])) for row in ([headers] + results)) for i in range(4)
+        ]
         row_format = " | ".join(f"{{:<{w}}}" for w in col_widths)
 
         print(row_format.format(*headers))
