@@ -3,7 +3,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from .Reader import Reader
 from .TreeScapeModel import TreeScapeModel
 from .StackedLinePython import StackedLinePython
 import os
@@ -105,7 +104,7 @@ class StackedLine:
     def setComponents(self, components):
 
         if not isinstance(components, list):
-            self.errorOut(f"Components needs to be a list")
+            self.errorOut(f"Components needs to be a list: {components}")
             return False
 
         valid_options = {StackedLine.LINEGRAPHS, StackedLine.FLAMEGRAPHS}
@@ -134,7 +133,7 @@ class StackedLine:
 
         """
         if not isinstance(nameOfLinesToPlot, list):
-            self.errorOut(f"DrillLevel needs to be a list")
+            self.errorOut(f"DrillLevel needs to be a list {nameOfLinesToPlot}")
             return False
 
         self.nameOfLinesToPlot = nameOfLinesToPlot
@@ -239,8 +238,6 @@ class StackedLine:
         if "drill_level" in kwargs:
             self.setDrillLevel(kwargs["drill_level"])
 
-        components = ";ST.components = ['linegraph', 'flamegraph'];"  # default is both.
-
         if "xaggregation" in kwargs:
             self.setXAggregation(kwargs["xaggregation"])
 
@@ -295,7 +292,8 @@ class StackedLine:
         jds = json.dumps(bus_serialization)
         code = file_content.replace("PJ_BUS_REPLACE_JS", jds)
 
-        import random, string
+        import random
+        import string
 
         self.container_id = "".join(
             random.choices(string.ascii_letters + string.digits, k=10)
@@ -304,8 +302,6 @@ class StackedLine:
         container_var = ';var container_id = "' + str(self.container_id) + '";'
 
         code = code + make_stub + self.components + container_var
-
-        scr = '<script src="https://cdn.jsdelivr.net/npm/jquery.md5@1.0.2/index.min.js?a=3"></script>'
 
         styleCSS = open(deploy_directory + "stacked.css").read()
         # display(HTML('<link rel="stylesheet" href="../stacked.css">' ))

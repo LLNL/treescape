@@ -4,30 +4,18 @@
 # SPDX-License-Identifier: MIT
 
 # ThicketReader.py
-import sys
 import platform
-import datetime as dt
+from glob import glob
+import os
+
 from .MyTimer import MyTimer
 
 
 input_deploy_dir_str = "/usr/gapps/spot/dev/"
 machine = platform.uname().machine
 
-import re
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from IPython.display import display
-from IPython.display import HTML
-
-import hatchet as ht
 import thicket as tt
 
-from .ThicketMultiplierStub import ThicketMultiplierStub
-
-import json
-import random
 from .Reader import Reader
 
 
@@ -47,9 +35,6 @@ class TH_ens:
             TH_ens.th_ens_defined = 1
 
             # get a list of all cali files in subdirectory - recursively
-            from glob import glob
-            import os
-
             PATH = "/Users/aschwanden1/lulesh_gen/100/"
             TH_ens.profiles = [
                 y for x in os.walk(PATH) for y in glob(os.path.join(x[0], "*.cali"))
@@ -135,9 +120,9 @@ class ThicketReader(Reader):
         count = {}
         howmany = 0
 
-        #  speed test.
-        for index, row in df.iterrows():
-            x = 4
+        # #  speed test.
+        # for index, row in df.iterrows():
+        #     x = 4
 
         MyTimer("test df.iterrows() speed")
 
@@ -235,7 +220,6 @@ class ThicketReader(Reader):
             return unsor_arr
 
     def test(self):
-        print(f"hello45")
         PATH = "/Users/aschwanden1/lulesh_gen/"
         profiles = [
             y for x in os.walk(PATH) for y in glob(os.path.join(x[0], "*.cali"))

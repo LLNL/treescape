@@ -3,8 +3,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from typing import List, Any
-
 
 class CaliMapMaker:
 

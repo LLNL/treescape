@@ -3,8 +3,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-from .ThicketReader import *
-
 
 class GraphTraverseModel:
     def __init__(self, th_ens, profiles):

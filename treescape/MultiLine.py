@@ -87,7 +87,6 @@ class MultiLine:
 
     def configure_date_xaxis(self, plt, labels):
         """Configure x-axis for better date readability"""
-        import numpy as np
         from datetime import datetime
 
         # Convert string dates back to datetime objects for better handling
@@ -191,7 +190,7 @@ class MultiLine:
                         except ValueError as e:
                             # Skip corrupted values
                             print(
-                                f"Warning: Skipping corrupted value '{metrics['sum']}' for test {test_name}"
+                                f"Warning--{e}: Skipping corrupted value '{metrics['sum']}' for test {test_name}"
                             )
                             continue
 

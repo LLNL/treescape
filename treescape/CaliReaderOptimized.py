@@ -7,9 +7,6 @@ import os
 import sys
 import glob
 import multiprocessing
-import statistics
-import copy
-from collections import defaultdict
 import caliperreader as cr
 from .Reader import Reader
 from .CaliMapMaker import CaliMapMaker

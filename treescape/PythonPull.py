@@ -4,13 +4,12 @@
 # SPDX-License-Identifier: MIT
 
 import matplotlib.pyplot as plt
-import numpy as np
 import datetime
 import time
 
 # Only import IPython if available (for Jupyter environments)
 try:
-    from IPython.display import Javascript, JSON, display
+    from IPython.display import Javascript, display
 
     IPYTHON_AVAILABLE = True
 except ImportError:

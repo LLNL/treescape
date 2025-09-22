@@ -14,13 +14,8 @@ import sys
 import caliperreader as cr
 from .Reader import Reader
 from .CaliMapMaker import CaliMapMaker
-from .MyTimer import MyTimer
 
-import threading
-import queue
-import time
 import copy
-import json
 
 
 def pretty_print(str):
@@ -60,7 +55,7 @@ class CaliReader(Reader):
             "sum#inclusive#sum#time.duration",
         ]
 
-        if inclusive_strings != None:
+        if inclusive_strings is not None:
             self.inclusive_strings = inclusive_strings
 
         self.xy_idx_by_drill_level = {}
@@ -107,7 +102,6 @@ class CaliReader(Reader):
         return combined
 
     def combine_and_setup(self, xaxis):
-
         nibp3 = self.combine_and_sort_x_and_y(xaxis, self.xy_idx_by_drill_level)
 
         self.entireForest["nodes"][xaxis] = self.convert_dict_to_array(nibp3)
@@ -115,9 +109,6 @@ class CaliReader(Reader):
         # print(pp)
 
     def init(self):
-
-        from pprint import pprint
-
         #  0.263s to load 100
         #  2.8s to load 1K          New version 1.067
         #  28 seconds to load 10,000.       60 seconds (i thin most of it was after combining)
@@ -399,6 +390,4 @@ class CaliReader(Reader):
         for rec in self.r.records:
             if "path" in rec:
                 if not isinstance(rec["path"], str):
-                    path = rec["path"][-1]
-
                     self.mapMaker.make(rec["path"])

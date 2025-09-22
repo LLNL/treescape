@@ -3,10 +3,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-from .ThicketReader import ThicketReader
-from .CaliReader import CaliReader
 from .Reader import Reader
-import json
 
 
 class Run:
