@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+#
+# Copyright 2025 Lawrence Livermore National Security, LLC and other
+# Thicket Project Developers. See the top-level LICENSE file for details.
+#
+# SPDX-License-Identifier: MIT
+
 # cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_80"
 # cali_file_loc = "/Users/aschwanden1/datasets/newdemo/mpi"
 # cali_file_loc = "/g/g0/pascal/datasets/newdemo/mpi"
