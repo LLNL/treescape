@@ -10,18 +10,19 @@ Track how performance scales with problem size:
 
 .. code-block:: python
 
-   import treescape as ts
+	import treescape as ts
 
-   # Load all runs from a scaling study
-   reader = ts.CaliReader("/path/to/scaling/runs")
-   model = ts.TreeScapeModel(reader)
+	# Load all runs from a scaling study
+	cali_file_loc = "../datasets/newdemo/test"
+	reader = ts.CaliReader(cali_file_loc)
+	model = ts.TreeScapeModel(reader)
 
-   # Create visualization
-   viz = ts.StackedLine()
-   viz.setXAxis("problem_size")
-   viz.setYAxis("avg")
-   viz.setDrillLevel(["main", "computation", "communication"])
-   viz.render(model)
+	# Create visualization
+	viz = ts.StackedLine()
+	viz.setXAxis("launchdate")
+	viz.setYAxis("avg")
+	viz.setDrillLevel(["IntegrateStressForElems", "CalcHourglassControlForElems"])
+	viz.render(model)
 
 Performance Regression Testing
 -------------------------------
@@ -30,18 +31,17 @@ Track performance changes over time:
 
 .. code-block:: python
 
-   import treescape as ts
-   from datetime import datetime
+	from datetime import datetime
 
-   reader = ts.CaliReader("/nightly/runs")
-   model = ts.TreeScapeModel(reader)
+	reader = ts.CaliReader(cali_file_loc)
+	model = ts.TreeScapeModel(reader)
 
-   # Sort by date
-   sorted_runs = sorted(model, key=lambda x: x.metadata["launchdate"])
+	# Sort by date
+	sorted_runs = sorted(model, key=lambda x: x.metadata["launchdate"])
 
-   # Plot with matplotlib for cleaner view
-   ml = ts.MultiLine(sorted_runs)
-   ml.plot_sums("launchdate", "main", "branch")
+	# Plot with matplotlib for cleaner view
+	ml = ts.MultiLine(sorted_runs)
+	ml.plot_sums("launchdate", "main", "branch")
 
 Comparing Multiple Tests
 -------------------------
@@ -50,24 +50,26 @@ Compare different test configurations:
 
 .. code-block:: python
 
-   import treescape as ts
+	cali_file_loc = "../datasets/newdemo/test"
+	xaxis = "launchday"
+	metadata_key = "test"
+	processes_for_parallel_read = 15
+	initial_regions = ["main"]
 
-   reader = ts.CaliReader([
-       "/tests/baseline/",
-       "/tests/optimized/",
-       "/tests/experimental/"
-   ])
-   model = ts.TreeScapeModel(reader)
+	caliReader = ts.CaliReader( cali_file_loc, processes_for_parallel_read )
+	tsm = ts.TreeScapeModel( caliReader)
+	#Always be sure to sort your data into some reasonable way. 
+	alltests = sorted(tsm, key=lambda x: x.metadata[xaxis])
 
-   # Filter by test type
-   baseline = [r for r in model if r.metadata["test"] == "baseline"]
-   optimized = [r for r in model if r.metadata["test"] == "optimized"]
+	sl = ts.StackedLine()
 
-   # Create separate visualizations
-   for test_runs, name in [(baseline, "Baseline"), (optimized, "Optimized")]:
-       print(f"\n{name} Performance:")
-       ml = ts.MultiLine(test_runs)
-       ml.plot_sums("problem_size", "main", "version")
+	##
+	for testname in { t.metadata[metadata_key] for t in tsm }:
+	    print(testname)
+	    # render each test.  click on "Run Info" button to see flamegraph and metadata
+	    all_tests = [t for t in tsm if t.metadata[metadata_key] == testname]
+	    sl.exportSVG( "/Users/aschwanden1/svg_imgs/", all_tests,  "launchday", ["TimeIncrement", "LagrangeLeapFrog"], testname )
+
 
 Exporting to SVG
 ----------------
@@ -76,25 +78,26 @@ Export visualizations for reports or presentations:
 
 .. code-block:: python
 
-   import treescape as ts
+	cali_file_loc = "../datasets/newdemo/test"
+	xaxis = "launchday"
+	metadata_key = "test"
+	processes_for_parallel_read = 15
+	initial_regions = ["main"]
 
-   reader = ts.CaliReader("/path/to/data")
-   model = ts.TreeScapeModel(reader)
+	caliReader = ts.CaliReader( cali_file_loc, processes_for_parallel_read )
+	tsm = ts.TreeScapeModel( caliReader)
+	#Always be sure to sort your data into some reasonable way. 
+	alltests = sorted(tsm, key=lambda x: x.metadata[xaxis])
 
-   viz = ts.StackedLine()
-   viz.setXAxis("launchdate")
-   viz.setYAxis("avg")
-   viz.setYMin(0)
-   viz.setYMax(100)
+	sl = ts.StackedLine()
 
-   # Export to SVG
-   viz.exportSVG(
-       directory="/output/path",
-       all_tests=model,
-       metavar="launchdate",
-       node_names=["main", "compute"],
-       testname="my_test"
-   )
+	##
+	for testname in { t.metadata[metadata_key] for t in tsm }:
+	    print(testname)
+	    # render each test.  click on "Run Info" button to see flamegraph and metadata
+	    all_tests = [t for t in tsm if t.metadata[metadata_key] == testname]
+	    sl.exportSVG( "/Users/aschwanden1/svg_imgs/", all_tests,  "launchday", ["TimeIncrement", "LagrangeLeapFrog"], testname )
+
 
 Custom Metrics
 --------------
@@ -103,21 +106,22 @@ Use custom metric names from your Caliper instrumentation:
 
 .. code-block:: python
 
-   import treescape as ts
+	# Specify custom inclusive metric strings
+	custom_metrics = [
+	    "min#inclusive#sum#time.duration",
+	    "max#inclusive#sum#time.duration",
+	    "sum#inclusive#sum#time.duration",
+	    "avg#inclusive#sum#time.duration",
+	]
 
-   # Specify custom inclusive metric strings
-   custom_metrics = [
-       "min#inclusive#sum#my.custom.timer",
-       "max#inclusive#sum#my.custom.timer",
-       "avg#inclusive#sum#my.custom.timer",
-       "sum#inclusive#sum#my.custom.timer"
-   ]
+	reader = ts.CaliReader(
+	    path=cali_file_loc,
+	    inclusive_strings=custom_metrics
+	)
+	model = ts.TreeScapeModel(reader)
 
-   reader = ts.CaliReader(
-       path="/path/to/data",
-       inclusive_strings=custom_metrics
-   )
-   model = ts.TreeScapeModel(reader)
+	viz = ts.StackedLine()
+	viz.render(model)
 
 Filtering by Metadata
 ----------------------
@@ -128,7 +132,7 @@ Analyze specific subsets of runs:
 
    import treescape as ts
 
-   reader = ts.CaliReader("/all/runs")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    # Filter by multiple criteria
@@ -154,7 +158,7 @@ Examine multiple functions simultaneously:
 
    import treescape as ts
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    viz = ts.StackedLine()
@@ -184,7 +188,7 @@ Adjust visualization size for presentations or notebooks:
 
    import treescape as ts
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    viz = ts.StackedLine()
@@ -202,7 +206,7 @@ Leverage pandas for advanced data manipulation:
    import treescape as ts
    import pandas as pd
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    # Convert to DataFrame for analysis
@@ -238,7 +242,7 @@ Compare different metadata dimensions:
 
    import treescape as ts
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    # Plot vs time
@@ -266,7 +270,7 @@ Calculate performance statistics across runs:
    import treescape as ts
    import statistics
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    # Collect times for main function
@@ -292,7 +296,7 @@ Identify outliers and performance regressions:
    import treescape as ts
    import statistics
 
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    # Sort by date
@@ -340,7 +344,7 @@ Best practices for Jupyter notebook usage:
    sys.path.append("/path/to/treescape")
 
    # Load data once at the top of notebook
-   reader = ts.CaliReader("/path/to/data")
+   reader = ts.CaliReader(cali_file_loc)
    model = ts.TreeScapeModel(reader)
 
    print(f"Loaded {len(model)} runs")
