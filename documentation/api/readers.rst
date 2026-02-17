@@ -59,9 +59,6 @@ CaliReader
         - ``"avg#inclusive#sum#time.duration"``
         - ``"sum#inclusive#sum#time.duration"``
 
-   .. attribute:: xy_idx_by_drill_level
-
-      Dictionary mapping node names to their x-axis and y-data values.
 
    .. attribute:: meta_globals
 
@@ -102,21 +99,6 @@ CaliReader
          for node_name, data in reader:
              print(f"{node_name}: {data['xaxis']}")
 
-   .. method:: get_meta_globals()
-
-      Get metadata type information.
-
-      :return: Dictionary mapping metadata keys to their types
-      :rtype: dict
-
-      .. code-block:: python
-
-         reader = ts.CaliReader("/path/to/files")
-         meta = reader.get_meta_globals()
-
-         print(meta["launchdate"])    # "int"
-         print(meta["problem_size"])  # "int"
-         print(meta["test"])          # "string"
 
 ThicketReader
 -------------

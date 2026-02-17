@@ -17,22 +17,24 @@ Example 1: Interactive Visualization
 
 .. code-block:: python
 
-   import treescape as ts
+    import treescape as ts
 
-   # Step 1: Load Caliper files
-   reader = ts.CaliReader("/path/to/cali/files")
+    # Load all runs from a scaling study
+    cali_file_loc = "../datasets/newdemo/test"
+    reader = ts.CaliReader(cali_file_loc)
+    model = ts.TreeScapeModel(reader)
 
-   # Step 2: Create a model
-   model = ts.TreeScapeModel(reader)
+    # Create visualization
+    viz = ts.StackedLine()
+    viz.setXAxis("launchdate")
+    viz.setYAxis("avg")
+    viz.setDrillLevel(["IntegrateStressForElems", "CalcHourglassControlForElems"])
+    viz.render(model)
 
-   # Step 3: Create and configure visualization
-   viz = ts.StackedLine()
-   viz.setXAxis("launchdate")  # X-axis: time
-   viz.setYAxis("avg")          # Y-axis: average time
-   viz.setDrillLevel(["main"])  # Show 'main' function
 
-   # Render the interactive chart
-   viz.render(model)
+.. image:: imgs/quick0.png
+   :alt: Quickstart Example 1
+   :width: 900
 
 Example 2: Multiple Caliper Files
 ----------------------------------

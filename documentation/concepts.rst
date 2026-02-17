@@ -3,6 +3,11 @@ Core Concepts
 
 Understanding TreeScape's architecture will help you use it effectively.
 
+Readers
+-------
+Readers are responsible for loading and parsing Caliper performance files.  There are multiple readers and you need to choose the right one for your use case.
+
+
 Data Flow
 ---------
 
@@ -18,10 +23,6 @@ TreeScape follows a simple data flow:
           ↓
       Visualization (StackedLine or MultiLine)
 
-Readers
--------
-
-Readers are responsible for loading and parsing Caliper performance files.
 
 CaliReader
 ~~~~~~~~~~
@@ -59,7 +60,8 @@ Alternative reader using the Thicket library:
 TreeScapeModel
 --------------
 
-The TreeScapeModel is a collection of Run objects representing individual performance runs.
+The TreeScapeModel is a collection of Run objects representing individual performance runs.  You need a treescapeModel to use the visualizations.
+It's purpose is to hold the data in a format that the visualizations can understand.  It's also iterable, so you can use it like a list.
 
 Structure
 ~~~~~~~~~
@@ -102,7 +104,30 @@ Each Run represents a single performance measurement:
 Performance Metrics
 -------------------
 
-TreeScape tracks four key metrics for each function:
+TreeScape can track multiple metrics for each function.  For example, if you are using caliper, you can specify which metrics you want to track.  By default, Caliper uses the following:
+
+.. code-block:: python
+
+    # Specify custom inclusive metric strings
+    custom_metrics = [
+        "min#inclusive#sum#time.duration",
+        "max#inclusive#sum#time.duration",
+        "sum#inclusive#sum#time.duration",
+        "avg#inclusive#sum#time.duration",
+    ]
+
+    reader = ts.CaliReader(
+        path=cali_file_loc,
+        inclusive_strings=custom_metrics
+    )
+
+    model = ts.TreeScapeModel(reader)
+
+    viz = ts.StackedLine()
+    viz.render(model)
+
+
+You can pick whatever metrics you like.  The above are just the defaults.  Metrics (avg, max, min, sum) are across mpi Ranks.
 
 * **sum**: Total inclusive time across all calls
 * **avg**: Average inclusive time per call
@@ -123,11 +148,11 @@ These metrics are stored in the ``perftree`` dictionary:
 Call Tree Hierarchy
 -------------------
 
-TreeScape maintains parent-child relationships between functions using ``childrenMap``:
+The data comes from Caliper.  TreeScape maintains parent-child relationships between functions using ``childrenMap``:
 
 .. code-block:: python
 
-   {
+   run.childrenMap = {
        "main": ["compute", "io", "finalize"],
        "compute": ["kernel_A", "kernel_B"],
        "io": ["read_data", "write_data"]
@@ -177,7 +202,7 @@ Interactive Jupyter visualization with:
 MultiLine
 ~~~~~~~~~
 
-Static matplotlib plots for:
+Static MultiLine plots for:
 
 * Multiple test series on one plot
 * Publication-quality figures
