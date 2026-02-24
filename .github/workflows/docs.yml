@@ -34,13 +34,15 @@ jobs:
 
       - name: Install dependencies
         run: |
+          set -x  # Enable debug mode to show commands
           python -m pip install --upgrade pip
-          pip install sphinx sphinx-rtd-theme
+          pip install -v sphinx sphinx-rtd-theme
 
       - name: Build documentation
         run: |
+          set -x  # Enable debug mode to show commands
           cd documentation
-          make html
+          make html SPHINXOPTS="-v"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

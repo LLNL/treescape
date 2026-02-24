@@ -10,7 +10,7 @@ StackedLine
 
    Interactive visualization with line graphs and flame graphs for Jupyter notebooks.
 
-   Displays performance data over an X-axis (time, problem size, etc.) with:
+   Displays performance data over an X-axis (time, problem size,, etc.) with:
 
    * **Line graphs**: Show performance trends
    * **Flame graphs**: Show call tree hierarchy at selected points
