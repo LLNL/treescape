@@ -115,7 +115,12 @@ StackedLine
 
    .. method:: setDrillLevel(nameOfLinesToPlot)
 
-      Set which functions to display as lines.
+      Set which functions to display as lines.  Performance data is structured as a tree.
+      Each layer of the tree is a drill level that allows you to jump one level down when you click on it.
+
+      .. image:: ../imgs/drill0.png
+         :alt: Drill Level Example
+         :width: 600
 
       :param nameOfLinesToPlot: List of function names to plot
       :type nameOfLinesToPlot: list[str]
