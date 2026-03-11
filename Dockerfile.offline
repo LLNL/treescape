@@ -1,0 +1,111 @@
+FROM python:3.9-slim
+
+LABEL authors="aschwanden1"
+LABEL description="TreeScape - Jupyter-based visualization tool for performance data"
+
+# Set working directory
+WORKDIR /app
+
+# Copy pre-downloaded Python packages (wheels) from local cache
+COPY ./pip-cache /root/.cache/pip
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt || \
+    pip install --cache-dir /root/.cache/pip -r requirements.txt
+
+# Copy the treescape source code
+COPY treescape ./treescape
+
+# Copy example data
+COPY data ./data
+
+# Create a simple example notebook
+RUN mkdir -p /app/notebooks && \
+    echo '{\n\
+ "cells": [\n\
+  {\n\
+   "cell_type": "markdown",\n\
+   "metadata": {},\n\
+   "source": [\n\
+    "# TreeScape Demo\\n",\n\
+    "\\n",\n\
+    "This notebook demonstrates basic TreeScape functionality with example Caliper data."\n\
+   ]\n\
+  },\n\
+  {\n\
+   "cell_type": "code",\n\
+   "execution_count": null,\n\
+   "metadata": {},\n\
+   "source": [\n\
+    "import sys\\n",\n\
+    "sys.path.append(\"/app\")\\n",\n\
+    "\\n",\n\
+    "import treescape as tr\\n",\n\
+    "\\n",\n\
+    "print(\\"TreeScape imported successfully!\\")"\n\
+   ]\n\
+  },\n\
+  {\n\
+   "cell_type": "code",\n\
+   "execution_count": null,\n\
+   "metadata": {},\n\
+   "source": [\n\
+    "# Load example Caliper data\\n",\n\
+    "cali_file_loc = \\"/app/data\\"\\n",\n\
+    "processes_for_parallel_read = 4\\n",\n\
+    "\\n",\n\
+    "caliReader = tr.CaliReader(cali_file_loc, processes_for_parallel_read)\\n",\n\
+    "print(f\\"Loaded {len(caliReader.records)} records\\")"\n\
+   ]\n\
+  },\n\
+  {\n\
+   "cell_type": "code",\n\
+   "execution_count": null,\n\
+   "metadata": {},\n\
+   "source": [\n\
+    "# Create TreeScape model\\n",\n\
+    "tsm = tr.TreeScapeModel(caliReader)\\n",\n\
+    "print(f\\"TreeScape model created with {len(tsm)} entries\\")"\n\
+   ]\n\
+  },\n\
+  {\n\
+   "cell_type": "markdown",\n\
+   "metadata": {},\n\
+   "source": [\n\
+    "## Next Steps\\n",\n\
+    "\\n",\n\
+    "You can now:\\n",\n\
+    "- Create visualizations using `tr.StackedLine()` or `tr.MultiLine()`\\n",\n\
+    "- Explore the data with different drill levels\\n",\n\
+    "- Analyze performance metrics across runs"\n\
+   ]\n\
+  }\n\
+ ],\n\
+ "metadata": {\n\
+  "kernelspec": {\n\
+   "display_name": "Python 3",\n\
+   "language": "python",\n\
+   "name": "python3"\n\
+  },\n\
+  "language_info": {\n\
+   "name": "python",\n\
+   "version": "3.9.0"\n\
+  }\n\
+ },\n\
+ "nbformat": 4,\n\
+ "nbformat_minor": 4\n\
+}' > /app/notebooks/treescape_demo.ipynb
+
+# Expose Jupyter port
+EXPOSE 8888
+
+# Set up Jupyter configuration
+RUN mkdir -p /root/.jupyter && \
+    echo "c.ServerApp.ip = '0.0.0.0'" >> /root/.jupyter/jupyter_server_config.py && \
+    echo "c.ServerApp.allow_root = True" >> /root/.jupyter/jupyter_server_config.py && \
+    echo "c.ServerApp.token = ''" >> /root/.jupyter/jupyter_server_config.py && \
+    echo "c.ServerApp.password = ''" >> /root/.jupyter/jupyter_server_config.py
+
+# Start JupyterLab
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/app/notebooks"]

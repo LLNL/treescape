@@ -1,0 +1,3 @@
+[submodule "treescape-media"]
+	path = treescape-media
+	url = git@github.com:llnl/treescape-media.git
