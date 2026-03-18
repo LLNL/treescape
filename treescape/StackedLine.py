@@ -277,11 +277,13 @@ class StackedLine:
             # "incrementExample.js"
         ]
 
-        deploy_directory = os.path.dirname(os.path.abspath(__file__)) + "/../"
+        # Get the parent directory of the treescape package (where js/ folder is)
+        deploy_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
         for file_path in files:
             # Open the file and read its contents
-            with open(deploy_directory + "js/" + file_path, "r") as file:
+            js_file = os.path.join(deploy_directory, "js", file_path)
+            with open(js_file, "r") as file:
                 file_content += file.read()
 
         import json
@@ -303,7 +305,8 @@ class StackedLine:
 
         code = code + make_stub + self.components + container_var
 
-        styleCSS = open(deploy_directory + "stacked.css").read()
+        css_file = os.path.join(deploy_directory, "stacked.css")
+        styleCSS = open(css_file).read()
         # display(HTML('<link rel="stylesheet" href="../stacked.css">' ))
         display(HTML("<style>" + styleCSS + "</style>"))
 

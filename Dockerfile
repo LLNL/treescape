@@ -13,6 +13,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the treescape source code
 COPY treescape ./treescape
 
+# Copy JavaScript files and CSS needed for visualization
+COPY js ./js
+COPY stacked.css ./stacked.css
+
 # Copy treescape-media examples and datasets
 COPY treescape-media/examples /app/examples
 COPY treescape-media/datasets /app/datasets
