@@ -3,6 +3,22 @@ Quick Start Guide
 
 This guide will help you get started with TreeScape quickly.
 
+Introduction
+------------
+
+TreeScape is a Jupyter-based visualization tool for performance data, enabling
+users to programmatically render graphs. With TreeScape, you can load an
+ensemble of `Caliper <https://github.com/LLNL/caliper>`_ performance files and
+visualize the collective performance of an application across many runs.
+
+TreeScape is the replacement for SPOT, which was web-based.
+TreeScape is built on top of Jupyter notebooks, which are a way to create
+and share documents that contain live code, equations, visualizations and narrative text.
+TreeScape is designed to be used interactively in a Jupyter notebook.
+You can also use TreeScape in a Python script.
+
+
+
 Basic Workflow
 --------------
 
