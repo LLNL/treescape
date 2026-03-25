@@ -21,7 +21,7 @@ You can also use TreeScape in a Python script.
 
     <iframe width="560" height="315" src="https://www.youtube.com/embed/RoAgG0UlVAc?si=zj78vHf75u2I5Yau" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-`Watch on YouTube <https://www.youtube.com/watch?v=RoAgG0UlVAc>`
+`Watch on YouTube <https://www.youtube.com/watch?v=RoAgG0UlVAc>`__
 
 
 Basic Workflow
