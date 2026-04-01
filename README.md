@@ -85,6 +85,12 @@ The tree grows to include everything encountered.
 If a node is missing in a specific file, the metric value for that node is NaN or absent.
 
 
+# Deployment
+1) login to RZ
+2) cd /usr/gapps/spot/treescape
+3) git fetch
+4) git pull
+
 # Contributions
 
 We welcome all kinds of contributions: new features, bug fixes, documentation edits; it's all great!
