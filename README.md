@@ -87,9 +87,18 @@ If a node is missing in a specific file, the metric value for that node is NaN o
 
 # Deployment
 1) login to RZ
-2) cd /usr/gapps/spot/treescape
+2) cd to the deploy directory
 3) git fetch
 4) git pull
+
+
+# Docker build 
+docker build -f Dockerfile -t treescape:latest .
+docker run -p 8888:8888 -v /Users/aschwanden1/datasets/newdemo/test:/app/data treescape:latest
+
+then in your browser: http://localhost:8888/lab
+
+
 
 # Contributions
 
