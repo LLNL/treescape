@@ -1,5 +1,5 @@
 [tool.setuptools]
-py-modules = ["treescape"]
+py-modules = [ ]
 
 [tool.poetry]
 name = "treescape"
