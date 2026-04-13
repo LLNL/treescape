@@ -1,16 +1,15 @@
 #!/Users/aschwanden1/min-venv/bin/python
 
+import sys
+import warnings
+
+import treescape as tr
+
 cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_24a"
 xaxis = "launchday"
 metadata_key = "test"
 processes_for_parallel_read = 15
 initial_regions = ["main"]
-
-import sys
-import warnings
-import os
-from contextlib import redirect_stderr
-from io import StringIO
 
 # Filter out the specific Roundtrip warning
 warnings.filterwarnings("ignore", message=".*Roundtrip module could not be loaded.*")
@@ -34,8 +33,6 @@ class FilteredStderr:
 
 # Replace stderr with filtered version
 sys.stderr = FilteredStderr(sys.stderr)
-
-import treescape as tr
 
 
 # Custom MultiLine class that saves plots instead of showing them

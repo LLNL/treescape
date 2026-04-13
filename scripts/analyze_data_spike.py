@@ -1,23 +1,23 @@
 #!/Users/aschwanden1/min-venv/bin/python
 
+import sys
+import warnings
+from collections import defaultdict
+from datetime import datetime
+
+import treescape as tr
+
 cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_24a"
 xaxis = "launchday"
 metadata_key = "test"
 processes_for_parallel_read = 15
 node_name = "main"
 
-import sys
-import warnings
-from collections import defaultdict
-from datetime import datetime
-
 # Filter warnings
 warnings.filterwarnings("ignore", message=".*Roundtrip module could not be loaded.*")
 
 sys.path.append("/Users/aschwanden1/min-venv-local/lib/python3.9/site-packages")
 sys.path.append("/Users/aschwanden1/treescape")
-
-import treescape as tr
 
 
 def launchday_to_date(epoch_timestamp):
@@ -112,7 +112,7 @@ def analyze_data_distribution(tests, xaxis, node_name, line_metadata_name):
 
             marker = " <-- SPIKE AREA" if i == spike_position else ""
             print(
-                f"Position {i:3d}: {x_pos} | Count: {count:2d} | Total Sum: {total_sum:10.2f} | Avg: {total_sum/count:8.2f}{marker}"
+                f"Position {i:3d}: {x_pos} | Count: {count:2d} | Total Sum: {total_sum:10.2f} | Avg: {total_sum / count:8.2f}{marker}"
             )
 
             # Show individual values if there are multiple data points
@@ -154,7 +154,7 @@ def analyze_data_distribution(tests, xaxis, node_name, line_metadata_name):
 
     all_sums.sort(reverse=True)
     for i, (total_sum, x_pos, count) in enumerate(all_sums[:10]):
-        print(f"{i+1:2d}. {x_pos} | Sum: {total_sum:10.2f} | Data Points: {count}")
+        print(f"{i + 1:2d}. {x_pos} | Sum: {total_sum:10.2f} | Data Points: {count}")
 
     return raw_data, test_data
 

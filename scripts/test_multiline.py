@@ -1,3 +1,9 @@
+import sys
+import warnings
+import os
+
+import treescape as tr
+
 cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_24a"
 # cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test_plus_48"
 
@@ -6,10 +12,6 @@ xaxis = "launchday"
 metadata_key = "test"
 processes_for_parallel_read = 15
 initial_regions = ["main"]
-
-import sys
-import warnings
-import os
 
 # Filter out the specific Roundtrip warning
 warnings.filterwarnings("ignore", message=".*Roundtrip module could not be loaded.*")
@@ -20,7 +22,6 @@ os.environ["PYTHONWARNINGS"] = "ignore::UserWarning"
 sys.path.append("/Users/aschwanden1/min-venv-local/lib/python3.9/site-packages")
 sys.path.append("/Users/aschwanden1/treescape")
 
-import treescape as tr
 
 if __name__ == "__main__":
     from multiprocessing import freeze_support

@@ -1,17 +1,17 @@
 #!/Users/aschwanden1/min-venv/bin/python
 
+import sys
+
+import treescape as tr
+
 cali_file_loc = "/Users/aschwanden1/datasets/newdemo/test"
 xaxis = "launchday"
 metadata_key = "test"
 processes_for_parallel_read = 15
 initial_regions = ["main"]
 
-import sys
-
 sys.path.append("/Users/aschwanden1/min-venv/lib/python3.9/site-packages")
 sys.path.append("/Users/aschwanden1/treescape")
-
-import treescape as tr
 
 if __name__ == "__main__":
     from multiprocessing import freeze_support
