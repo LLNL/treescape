@@ -37,6 +37,7 @@ class Node:
     def __repr__(self):
         return f"Node({self.value}, children={list(self.children.keys())}, duration={self.duration})"
 
+
 # start of reader
 class CaliReader(Reader):
 
@@ -46,7 +47,9 @@ class CaliReader(Reader):
         self.path = path
         self.mapMaker = CaliMapMaker()
         self.childrenMaps_by_xaxis = {}  # Store childrenMap per xaxis value
-        self.paths_by_xaxis = {}  # Store paths per xaxis value (for building childrenMaps)
+        self.paths_by_xaxis = (
+            {}
+        )  # Store paths per xaxis value (for building childrenMaps)
 
         self.entireForest = {"nodes": {}}
 
@@ -127,7 +130,9 @@ class CaliReader(Reader):
             if os.path.isdir(self.path):
                 # It's a directory - get all .cali files recursively
                 profiles = [
-                    y for x in os.walk(self.path) for y in glob(os.path.join(x[0], "*.cali"))
+                    y
+                    for x in os.walk(self.path)
+                    for y in glob(os.path.join(x[0], "*.cali"))
                 ]
             elif os.path.isfile(self.path):
                 # It's a single file
@@ -141,9 +146,14 @@ class CaliReader(Reader):
                 try:
                     if os.path.isdir(path):
                         # It's a directory - get all .cali files recursively
-                        profiles.extend([
-                            y for x in os.walk(path) for y in glob(os.path.join(x[0], "*.cali"))
-                        ])
+                        profiles.extend(
+                            [
+                                y
+                                for x in os.walk(path)
+                                for y in glob(os.path.join(x[0], "*.cali"))
+                            ]
+                        )
+
                     elif os.path.isfile(path):
                         # It's a file
                         profiles.append(path)
@@ -229,9 +239,9 @@ class CaliReader(Reader):
         self.meta_globals = self.get_meta_globals()
         self.xy_idx_by_drill_level = combined_nodes
 
-        #pretty_json = json.dumps(self.xy_idx_by_drill_level, indent=4)
-        #print(pretty_json)
-        #exit()
+        # pretty_json = json.dumps(self.xy_idx_by_drill_level, indent=4)
+        # print(pretty_json)
+        # exit()
 
     def read_many_files_wrapper(self, *args):
         return self.read_many_files(*args, inclusive_strings=self.inclusive_strings)
@@ -248,10 +258,12 @@ class CaliReader(Reader):
 
             # Extract the node data and paths
             each_res.append(one_file_result["nodes"])
-            paths_data.append({
-                "xaxis_key": one_file_result["xaxis_key"],
-                "paths": one_file_result["paths"]
-            })
+            paths_data.append(
+                {
+                    "xaxis_key": one_file_result["xaxis_key"],
+                    "paths": one_file_result["paths"],
+                }
+            )
 
         # still need to combine and return it.
         total_dict = self.combine_my_objects(each_res)
@@ -478,7 +490,7 @@ class CaliReader(Reader):
             # Copy the node data and add the per-xaxis childrenMaps
             nodes_with_children_map[node_name] = {
                 **node_data,
-                "childrenMaps": per_xaxis_children_maps  # Array of childrenMaps, one per xaxis value
+                "childrenMaps": per_xaxis_children_maps,  # Array of childrenMaps, one per xaxis value
             }
 
         return {

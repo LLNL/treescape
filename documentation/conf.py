@@ -2,48 +2,49 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
-project = 'TreeScape'
-copyright = '2025, Lawrence Livermore National Security, LLC'
-author = 'Pascal Aschwandan and Matthew LeGendre'
-release = '1.0'
+project = "TreeScape"
+copyright = "2025, Lawrence Livermore National Security, LLC"
+author = "Pascal Aschwandan and Matthew LeGendre"
+release = "1.0"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosummary",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
-html_title = 'TreeScape Documentation'
-html_short_title = 'TreeScape'
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]
+html_title = "TreeScape Documentation"
+html_short_title = "TreeScape"
 html_logo = None
 html_favicon = None
 
 # -- Options for autodoc -----------------------------------------------------
 autodoc_default_options = {
-    'members': True,
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
-    'exclude-members': '__weakref__'
+    "members": True,
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
+    "exclude-members": "__weakref__",
 }
 
 # -- Options for intersphinx -------------------------------------------------
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'pandas': ('https://pandas.pydata.org/docs/', None),
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
 }
 
 # Napoleon settings

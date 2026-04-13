@@ -19,6 +19,7 @@ import os
 from datetime import datetime
 from collections import defaultdict, Counter
 
+import treescape as tr
 
 sys.path.append("/usr/gapps/spot/treescape-ven/lib/python3.9/site-packages")
 sys.path.append("/usr/gapps/spot/treescape")
@@ -26,8 +27,6 @@ sys.path.append("/usr/gapps/spot/treescape")
 # this is just for local, not used for other environments.
 # sys.path.append("/Users/aschwanden1/min-venv-local/lib/python3.9/site-packages")
 sys.path.append("/")
-
-import treescape as tr
 
 # Configuration (matching performance_CaliReader.py)
 # set cali file loc just in case the parameter is missing.
