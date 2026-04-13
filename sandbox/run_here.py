@@ -1,13 +1,12 @@
 import sys
-import time
-
-sys.path.append("../python")
-sys.path.append("../viz")
 
 from MyTimer import MyTimer
 from StackedLine import StackedLine
 from CaliReader import CaliReader
 from TreeScapeModel import TreeScapeModel
+
+sys.path.append("../python")
+sys.path.append("../viz")
 
 m = MyTimer("start")
 # your script here
