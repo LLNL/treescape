@@ -1,9 +1,17 @@
 [tool.setuptools]
 py-modules = [ ]
 
+[project]
+name = "treescape"
+version = "2026.1.0"
+description = "Jupyter-based visualization tool for performance data"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+
 [tool.poetry]
 name = "treescape"
-version = "2025.1.0"
+version = "2026.1.0"
 description = "Jupyter-based visualization for performance data."
 license = "MIT"
 
