@@ -68,8 +68,8 @@ class TreeScapeModel(list):
 
         # Initialize the transformed data list
         tsm_data = []
-        #print(repr(et))
-        #exit()
+        # print(repr(et))
+        # exit()
 
         # Iterate over each top-level key in the original data
         for key, value in et.items():
@@ -109,8 +109,8 @@ class TreeScapeModel(list):
         tsm_data = tsm_runs
 
         self.runs = tsm_data
-        #print(repr(self.runs))
-        #exit()
+        # print(repr(self.runs))
+        # exit()
         super().__init__(tsm_data)
 
     def get_meta_globals(self):

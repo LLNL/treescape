@@ -37,6 +37,7 @@ class Node:
     def __repr__(self):
         return f"Node({self.value}, children={list(self.children.keys())}, duration={self.duration})"
 
+
 # start of reader
 class CaliReader(Reader):
 
@@ -229,9 +230,9 @@ class CaliReader(Reader):
         self.meta_globals = self.get_meta_globals()
         self.xy_idx_by_drill_level = combined_nodes
 
-        #pretty_json = json.dumps(self.xy_idx_by_drill_level, indent=4)
-        #print(pretty_json)
-        #exit()
+        # pretty_json = json.dumps(self.xy_idx_by_drill_level, indent=4)
+        # print(pretty_json)
+        # exit()
 
     def read_many_files_wrapper(self, *args):
         return self.read_many_files(*args, inclusive_strings=self.inclusive_strings)

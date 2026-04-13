@@ -4,14 +4,14 @@
 # SPDX-License-Identifier: MIT
 
 import matplotlib
-
-matplotlib.use("Agg")  # Use a non-interactive backend for image generation
 import matplotlib.pyplot as plt
 
 from collections import defaultdict
 from datetime import datetime
 import numpy as np
 import hashlib
+
+matplotlib.use("Agg")  # Use a non-interactive backend for image generation
 
 
 class StackedLinePython:

@@ -9,11 +9,9 @@ from glob import glob
 import os
 import thicket as tt
 
-from .MyTimer import MyTimer
+from .Reader import Reader
 
 machine = platform.uname().machine
-
-from .Reader import Reader
 
 
 class TH_ens:
@@ -22,8 +20,8 @@ class TH_ens:
     th_ens = 0
     profiles = 0
 
-    def get_th_ens(self, cali_files ):
-        return self.get_th_ens_impl( cali_files )
+    def get_th_ens(self, cali_files):
+        return self.get_th_ens_impl(cali_files)
 
     def get_th_ens_impl(self, cali_files):
 
@@ -141,7 +139,6 @@ class ThicketReader(Reader):
 
         return xaxis_arr
 
-
     def get_entire(self):
 
         # PSTUB
@@ -214,8 +211,6 @@ class ThicketReader(Reader):
         }
 
     def get_entire_for_xaxis(self, xaxis_name):
-        import pandas as pd
-
         df = self.th_ens.dataframe.reset_index()
 
         # Create a mapping from profile to xaxis value
@@ -276,7 +271,7 @@ class ThicketReader(Reader):
         # print("uniq_date=" + str(uniq_date))
 
         # print("howmany=" + str(howmany))
-        #MyTimer("get_entire_for_xaxis - iterrows")
+        # MyTimer("get_entire_for_xaxis - iterrows")
 
         renderDat = {}
         ldates = {}
@@ -309,7 +304,7 @@ class ThicketReader(Reader):
                 {"name": name, "ydata": renderDat[name], "xaxis": ordered}
             )
 
-        #MyTimer("get_entire_for_xaxis - renderDat")
+        # MyTimer("get_entire_for_xaxis - renderDat")
 
         return entireNodes
 

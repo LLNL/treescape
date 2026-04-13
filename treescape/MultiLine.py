@@ -3,7 +3,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-import matplotlib
 import matplotlib.pyplot as plt
 
 # Configure matplotlib for Jupyter after importing pyplot
@@ -13,7 +12,7 @@ try:
     if ipython is not None:
         # Enable inline plotting for Jupyter
         ipython.run_line_magic('matplotlib', 'inline')
-except:
+except Exception:
     # Not in Jupyter or magic command failed, continue anyway
     pass
 
@@ -212,7 +211,7 @@ class MultiLine:
             if get_ipython() is None:
                 # Not in Jupyter, use show()
                 plt.show()
-        except:
+        except Exception:
             # IPython not available, use show()
             plt.show()
 
