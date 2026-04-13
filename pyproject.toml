@@ -1,3 +1,6 @@
+[tool.setuptools]
+py-modules = [ ]
+
 [tool.poetry]
 name = "treescape"
 version = "2025.1.0"
