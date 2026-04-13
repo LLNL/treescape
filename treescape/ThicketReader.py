@@ -35,7 +35,9 @@ class TH_ens:
                 if os.path.isdir(cali_files):
                     # It's a directory - get all .cali files recursively
                     TH_ens.profiles = [
-                        y for x in os.walk(cali_files) for y in glob(os.path.join(x[0], "*.cali"))
+                        y
+                        for x in os.walk(cali_files)
+                        for y in glob(os.path.join(x[0], "*.cali"))
                     ]
                 elif os.path.isfile(cali_files):
                     # It's a single file
@@ -48,9 +50,14 @@ class TH_ens:
                 for path in cali_files:
                     if os.path.isdir(path):
                         # It's a directory - get all .cali files recursively
-                        TH_ens.profiles.extend([
-                            y for x in os.walk(path) for y in glob(os.path.join(x[0], "*.cali"))
-                        ])
+                        TH_ens.profiles.extend(
+                            [
+                                y
+                                for x in os.walk(path)
+                                for y in glob(os.path.join(x[0], "*.cali"))
+                            ]
+                        )
+
                     elif os.path.isfile(path):
                         # It's a file
                         TH_ens.profiles.append(path)
@@ -66,7 +73,9 @@ class TH_ens:
                         unique_profiles.append(profile)
                 TH_ens.profiles = unique_profiles
             else:
-                raise TypeError(f"cali_files must be a string or list of strings, got {type(cali_files)}")
+                raise TypeError(
+                    f"cali_files must be a string or list of strings, got {type(cali_files)}"
+                )
 
             #  this contains some metadata we need.
             #  also contains the tree data.
@@ -183,7 +192,7 @@ class ThicketReader(Reader):
                         "name": node_name,
                         "xaxis": [],
                         "ydata": [],
-                        "childrenMap": node_children_map  # Each node gets its own childrenMap
+                        "childrenMap": node_children_map,  # Each node gets its own childrenMap
                     }
 
                 nodes[node_name]["xaxis"].append(meta_by_xaxis[xaxis_value])
@@ -194,11 +203,11 @@ class ThicketReader(Reader):
         for col, dtype in self.th_ens.metadata.dtypes.items():
             # Convert pandas dtypes to simple type strings
             dtype_str = str(dtype)
-            if 'int' in dtype_str:
+            if "int" in dtype_str:
                 meta_globals[col] = "int"
-            elif 'float' in dtype_str:
+            elif "float" in dtype_str:
                 meta_globals[col] = "float"
-            elif 'datetime' in dtype_str or 'date' in dtype_str:
+            elif "datetime" in dtype_str or "date" in dtype_str:
                 meta_globals[col] = "date"
             else:
                 meta_globals[col] = "string"
@@ -207,7 +216,7 @@ class ThicketReader(Reader):
             "nodes": nodes,
             "childrenMap": childrenMap,
             "parentMap": parentMap,
-            "meta_globals": meta_globals
+            "meta_globals": meta_globals,
         }
 
     def get_entire_for_xaxis(self, xaxis_name):
@@ -219,18 +228,22 @@ class ThicketReader(Reader):
 
         # Normalize xaxis values to string, then to float if numeric
         metadata_xaxis = metadata_xaxis.astype(str)
-        metadata_xaxis = metadata_xaxis.apply(lambda x: float(x) if x.replace('.', '', 1).replace('-', '', 1).isdigit() else x)
+        metadata_xaxis = metadata_xaxis.apply(
+            lambda x: (
+                float(x) if x.replace(".", "", 1).replace("-", "", 1).isdigit() else x
+            )
+        )
 
         # Normalize the target xaxis_name
         xaxis_name_normalized = str(xaxis_name)
-        if xaxis_name_normalized.replace('.', '', 1).replace('-', '', 1).isdigit():
+        if xaxis_name_normalized.replace(".", "", 1).replace("-", "", 1).isdigit():
             xaxis_name_normalized = float(xaxis_name_normalized)
 
         # Add xaxis column to dataframe by mapping profile to xaxis value
-        df['xaxis_value'] = df['profile'].map(metadata_xaxis)
+        df["xaxis_value"] = df["profile"].map(metadata_xaxis)
 
         # Filter to only rows matching the target xaxis_name
-        df_filtered = df[df['xaxis_value'] == xaxis_name_normalized].copy()
+        df_filtered = df[df["xaxis_value"] == xaxis_name_normalized].copy()
 
         # If no matching rows, return empty list
         if len(df_filtered) == 0:
@@ -239,32 +252,31 @@ class ThicketReader(Reader):
         # Group by name and xaxis_value, then aggregate
         # This replaces the entire iterrows loop with vectorized operations
         # PERFORMANCE: This is ~100x faster than iterating with iterrows()
-        grouped = df_filtered.groupby(['name', 'xaxis_value'])['Avg time/rank'].agg([
-            ('sum', 'sum'),
-            ('min', 'min'),
-            ('max', 'max'),
-            ('count', 'count')
-        ]).reset_index()
+        grouped = (
+            df_filtered.groupby(["name", "xaxis_value"])["Avg time/rank"]
+            .agg([("sum", "sum"), ("min", "min"), ("max", "max"), ("count", "count")])
+            .reset_index()
+        )
 
         # Build sumArr structure from grouped data
         # Note: This small iterrows loop is acceptable because grouped has very few rows
         # (one per unique node name, typically 30-50 rows vs thousands in the original df)
         sumArr = {}
         for _, row in grouped.iterrows():
-            name = row['name']
-            xaxis_val = row['xaxis_value']
+            name = row["name"]
+            xaxis_val = row["xaxis_value"]
 
             if name not in sumArr:
                 sumArr[name] = {}
 
             # Calculate average from sum and count
-            avg_value = row['sum'] / row['count'] if row['count'] > 0 else 0
+            avg_value = row["sum"] / row["count"] if row["count"] > 0 else 0
 
             sumArr[name][xaxis_val] = {
-                'sum': row['sum'],
-                'min': row['min'],
-                'max': row['max'],
-                'avg': avg_value
+                "sum": row["sum"],
+                "min": row["min"],
+                "max": row["max"],
+                "avg": avg_value,
             }
 
         # uniq_date = len(sumArr["main"])

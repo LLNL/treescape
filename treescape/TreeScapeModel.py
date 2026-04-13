@@ -17,7 +17,11 @@ class Run:
         return str(self.to_dict())
 
     def to_dict(self):
-        return {"metadata": self.metadata, "perftree": self.perftree, "childrenMap": self.childrenMap}
+        return {
+            "metadata": self.metadata,
+            "perftree": self.perftree,
+            "childrenMap": self.childrenMap,
+        }
 
     def getMetaData(self, key):
         return self.metadata[key]
@@ -78,7 +82,9 @@ class TreeScapeModel(list):
             for i, metadata in enumerate(value["xaxis"]):
                 # Find or create the entry for the current index
                 if len(tsm_data) <= i:
-                    tsm_data.append({"metadata": {}, "perftree": {}, "childrenMap": None})
+                    tsm_data.append(
+                        {"metadata": {}, "perftree": {}, "childrenMap": None}
+                    )
 
                 # Add or update the metadata and perftree
                 tsm_data[i]["metadata"] = metadata
@@ -102,7 +108,11 @@ class TreeScapeModel(list):
         tsm_runs = []
         for index, td_obj in enumerate(tsm_data):
             # Use the per-run childrenMap if available, otherwise use global
-            run_children_map = td_obj.get("childrenMap") if td_obj.get("childrenMap") else self.childrenMap
+            run_children_map = (
+                td_obj.get("childrenMap")
+                if td_obj.get("childrenMap")
+                else self.childrenMap
+            )
             r0 = Run(td_obj["metadata"], td_obj["perftree"], reader, run_children_map)
             tsm_runs.append(r0)
 
