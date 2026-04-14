@@ -1,5 +1,5 @@
-[tool.setuptools.packages.find]
-where = ["treescape"]  # Look for packages in the 'src' directory
+[tool.setuptools.packages]
+find = {}
 
 [project]
 name = "treescape"
