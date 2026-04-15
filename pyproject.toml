@@ -1,5 +1,6 @@
-[tool.setuptools.packages]
-find = {}
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "treescape"
@@ -14,6 +15,10 @@ name = "treescape"
 version = "2026.1.0"
 description = "Jupyter-based visualization for performance data."
 license = "MIT"
+include = [
+    { path = "treescape/static/stacked.css", format = ["sdist", "wheel"] },
+    { path = "treescape/static/*.js", format = ["sdist", "wheel"] }
+]
 
 [tool.ruff]
 line-length = 88
