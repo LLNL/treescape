@@ -3,8 +3,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-import os
-from importlib.resources import files
+import importlib.resources
 
 from .TreeScapeModel import TreeScapeModel
 from .StackedLinePython import StackedLinePython
@@ -281,8 +280,10 @@ class StackedLine:
 
         for file_path in files:
             # Open the file and read its contents
-            js_file = files("treescape").joinpath("static/" + file_path)
-            with open(file_path, "r") as file:
+            js_file = importlib.resources.files("treescape").joinpath(
+                "static/" + file_path
+            )
+            with open(js_file, "r") as file:
                 file_content += file.read()
 
         import json
@@ -304,7 +305,7 @@ class StackedLine:
 
         code = code + make_stub + self.components + container_var
 
-        css_file = files("treescape").joinpath("static/stacked.css")
+        css_file = importlib.resources.files("treescape").joinpath("static/stacked.css")
         styleCSS = open(css_file).read()
         # display(HTML('<link rel="stylesheet" href="../stacked.css">' ))
         display(HTML("<style>" + styleCSS + "</style>"))
